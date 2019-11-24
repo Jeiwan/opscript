@@ -68,7 +68,7 @@ func (g GUI) layout(c *gocui.Gui) error {
 		c.SetCurrentView(viewScript)
 
 		for _, s := range g.debugger.Steps {
-			fmt.Fprintf(v, "%s\n", s.Disasm)
+			fmt.Fprintf(v, "%s\n", formatOpcode(s.Disasm))
 		}
 	}
 
