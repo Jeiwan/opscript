@@ -1,4 +1,4 @@
-package main
+package gui
 
 import (
 	"fmt"
@@ -13,44 +13,37 @@ const (
 	viewStack  = "stack"
 )
 
-type gui struct {
+// GUI ...
+type GUI struct {
 	cui      *gocui.Gui
 	debugger *debugger.Debugger
 }
 
-func newGui(debugger *debugger.Debugger) (*gui, error) {
+// New returns a new GUI.
+func New(debugger *debugger.Debugger) (*GUI, error) {
 	c, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		return nil, err
 	}
 
-	g := &gui{
+	g := &GUI{
 		cui:      c,
 		debugger: debugger,
 	}
 
 	c.SetManagerFunc(g.layout)
-
-	if err := c.SetKeybinding(viewScript, gocui.KeyArrowUp, gocui.ModNone, g.cursorUp); err != nil {
-		return nil, err
-	}
-
-	if err := c.SetKeybinding(viewScript, gocui.KeyArrowDown, gocui.ModNone, g.cursorDown); err != nil {
-		return nil, err
-	}
-
-	if err := c.SetKeybinding("", 'q', gocui.ModNone, quit); err != nil {
-		return nil, fmt.Errorf("setKey q: %+v", err)
-	}
+	g.setKeybindings(c)
 
 	return g, nil
 }
 
-func (g gui) Stop() {
+// Stop ...
+func (g GUI) Stop() {
 	g.cui.Close()
 }
 
-func (g gui) Start() error {
+// Start ...
+func (g GUI) Start() error {
 	if err := g.cui.MainLoop(); err != nil && err != gocui.ErrQuit {
 		return err
 	}
@@ -58,7 +51,7 @@ func (g gui) Start() error {
 	return nil
 }
 
-func (g gui) layout(c *gocui.Gui) error {
+func (g GUI) layout(c *gocui.Gui) error {
 	maxX, maxY := c.Size()
 
 	if v, err := c.SetView(viewScript, 0, 0, int(0.5*float64(maxX))-1, maxY-1); err != nil {
@@ -92,7 +85,23 @@ func (g gui) layout(c *gocui.Gui) error {
 	return nil
 }
 
-func (g gui) updateStack() error {
+func (g GUI) setKeybindings(c *gocui.Gui) error {
+	if err := c.SetKeybinding(viewScript, gocui.KeyArrowUp, gocui.ModNone, g.cursorUp); err != nil {
+		return err
+	}
+
+	if err := c.SetKeybinding(viewScript, gocui.KeyArrowDown, gocui.ModNone, g.cursorDown); err != nil {
+		return err
+	}
+
+	if err := c.SetKeybinding("", 'q', gocui.ModNone, quit); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (g GUI) updateStack() error {
 	v, err := g.cui.View(viewStack)
 	if err != nil {
 		return err

@@ -1,10 +1,10 @@
-package main
+package gui
 
 import (
 	"github.com/jroimartin/gocui"
 )
 
-func (g *gui) cursorDown(c *gocui.Gui, v *gocui.View) error {
+func (g *GUI) cursorDown(c *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		cx, cy := v.Cursor()
 		if cy+1 >= len(g.debugger.Steps) {
@@ -27,7 +27,7 @@ func (g *gui) cursorDown(c *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
-func (g *gui) cursorUp(c *gocui.Gui, v *gocui.View) error {
+func (g *GUI) cursorUp(c *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		ox, oy := v.Origin()
 		cx, cy := v.Cursor()

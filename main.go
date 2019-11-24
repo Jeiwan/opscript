@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/Jeiwan/scriptdbg/debugger"
+	"github.com/Jeiwan/scriptdbg/gui"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/rpcclient"
 	"github.com/sirupsen/logrus"
@@ -63,10 +64,11 @@ func main() {
 		logrus.Fatalln(err)
 	}
 
-	gui, err := newGui(d)
+	gui, err := gui.New(d)
 	if err != nil {
 		logrus.Fatalln(err)
 	}
+	defer gui.Stop()
 
 	if err := gui.Start(); err != nil {
 		logrus.Fatalln(err)
