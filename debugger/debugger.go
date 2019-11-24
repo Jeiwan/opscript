@@ -12,8 +12,8 @@ type Debugger struct {
 	Steps      []Step
 }
 
-// NewWithEngine ...
-func NewWithEngine(en *txscript.Engine) (*Debugger, error) {
+// New ...
+func New(en *txscript.Engine) (*Debugger, error) {
 	var steps []Step
 
 Loop:
@@ -47,20 +47,6 @@ Loop:
 		Engine:     en,
 		Steps:      steps,
 	}, nil
-}
-
-// New ...
-func New(sigScript []byte, input [][]byte, output []byte) (*Debugger, error) {
-	en, err := newWitnessEngine(
-		sigScript,
-		input,
-		output,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	return NewWithEngine(en)
 }
 
 // Next ...

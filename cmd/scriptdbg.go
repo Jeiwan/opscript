@@ -59,7 +59,7 @@ func newRootCmd() *cobra.Command {
 				logrus.Fatal(fmt.Errorf("new engine: %+v", err))
 			}
 
-			d, err := debugger.NewWithEngine(en)
+			d, err := debugger.New(en)
 			if err != nil {
 				logrus.Fatalln(err)
 			}
