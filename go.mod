@@ -8,4 +8,5 @@ require (
 	github.com/mattn/go-runewidth v0.0.6 // indirect
 	github.com/nsf/termbox-go v0.0.0-20190817171036-93860e161317 // indirect
 	github.com/sirupsen/logrus v1.4.2
+	github.com/spf13/cobra v0.0.5
 )
