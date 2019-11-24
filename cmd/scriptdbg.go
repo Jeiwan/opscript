@@ -54,7 +54,7 @@ func newRootCmd() *cobra.Command {
 				logrus.Fatal(fmt.Errorf("get prev transaction: %+v", err))
 			}
 
-			en, err := newEngine(txResp.MsgTx(), prevTxResp.MsgTx().TxOut[prevOut.Index].PkScript)
+			en, err := newEngine(txResp.MsgTx(), prevTxResp.MsgTx().TxOut[prevOut.Index].PkScript, txInput)
 			if err != nil {
 				logrus.Fatal(fmt.Errorf("new engine: %+v", err))
 			}
@@ -86,11 +86,11 @@ func newRootCmd() *cobra.Command {
 	return cmd
 }
 
-func newEngine(tx *wire.MsgTx, output []byte) (*txscript.Engine, error) {
+func newEngine(tx *wire.MsgTx, output []byte, inputIdx int) (*txscript.Engine, error) {
 	e, err := txscript.NewEngine(
 		output,
 		tx,
-		0,
+		inputIdx,
 		txscript.ScriptVerifyWitness+txscript.ScriptBip16+txscript.ScriptVerifyCleanStack+txscript.ScriptVerifyMinimalData,
 		nil,
 		nil,
