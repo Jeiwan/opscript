@@ -72,13 +72,12 @@ func (g GUI) layout(c *gocui.Gui) error {
 		}
 	}
 
-	if v, err := c.SetView(viewStack, int(0.5*float64(maxX)), 0, maxX-1, maxY-1); err != nil {
+	if _, err := c.SetView(viewStack, int(0.5*float64(maxX)), 0, maxX-1, maxY-1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		step := g.debugger.CurrentStep()
-		for _, s := range step.Stack {
-			fmt.Fprintf(v, "%x\n", s)
+		if err := g.updateStack(); err != nil {
+			return err
 		}
 	}
 
@@ -110,8 +109,8 @@ func (g GUI) updateStack() error {
 	v.Clear()
 
 	step := g.debugger.CurrentStep()
-	for _, s := range step.Stack {
-		fmt.Fprintf(v, "%x\n", s)
+	for i := range step.Stack {
+		fmt.Fprintf(v, "%x\n", step.Stack[len(step.Stack)-i-1])
 	}
 
 	return nil
