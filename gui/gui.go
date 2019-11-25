@@ -3,7 +3,7 @@ package gui
 import (
 	"fmt"
 
-	"github.com/Jeiwan/scriptdbg/debugger"
+	"github.com/Jeiwan/opscript/debugger"
 	"github.com/jroimartin/gocui"
 )
 

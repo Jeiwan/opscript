@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/Jeiwan/scriptdbg/cmd"
+	"github.com/Jeiwan/opscript/cmd"
 	"github.com/sirupsen/logrus"
 )
 

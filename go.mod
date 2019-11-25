@@ -1,4 +1,4 @@
-module github.com/Jeiwan/scriptdbg
+module github.com/Jeiwan/opscript
 
 go 1.12
 

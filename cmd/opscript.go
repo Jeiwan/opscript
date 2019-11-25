@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/Jeiwan/scriptdbg/debugger"
-	"github.com/Jeiwan/scriptdbg/gui"
+	"github.com/Jeiwan/opscript/debugger"
+	"github.com/Jeiwan/opscript/gui"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/rpcclient"
 	"github.com/btcsuite/btcd/txscript"
@@ -23,7 +23,7 @@ func newRootCmd() *cobra.Command {
 	var txInput int
 
 	cmd := &cobra.Command{
-		Use: "scriptdbg",
+		Use: "opscript",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			btcclient, err := rpcclient.New(&rpcclient.ConnConfig{
 				HTTPPostMode: true,
