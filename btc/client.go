@@ -1,3 +1,0 @@
-package btc
-
-func NewClient()
