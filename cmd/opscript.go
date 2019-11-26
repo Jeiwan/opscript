@@ -15,7 +15,12 @@ import (
 
 // New ...
 func New() *cobra.Command {
-	return newRootCmd()
+	rootCmd := newRootCmd()
+	buildSpecCmd := newBuildSpecCmd()
+
+	rootCmd.AddCommand(buildSpecCmd)
+
+	return rootCmd
 }
 
 func newRootCmd() *cobra.Command {
