@@ -6,14 +6,21 @@ import (
 
 func (g *GUI) cursorDown(c *gocui.Gui, v *gocui.View) error {
 	if v != nil {
-		cx, cy := v.Cursor()
-		if cy+1 >= len(g.debugger.Steps) {
+		if len(g.codeLines) == 0 {
 			return nil
 		}
 
-		if err := v.SetCursor(cx, cy+1); err != nil {
-			ox, oy := v.Origin()
-			if err := v.SetOrigin(ox, oy+1); err != nil {
+		cx, cy := v.Cursor()
+		nextLine := g.codeLines.next(cy)
+		lastLine := g.codeLines.last()
+
+		if nextLine.lineIdx > lastLine.lineIdx {
+			return nil
+		}
+
+		if err := v.SetCursor(cx, nextLine.lineIdx); err != nil {
+			ox, _ := v.Origin()
+			if err := v.SetOrigin(ox, g.codeLines.first().lineIdx); err != nil {
 				return err
 			}
 		}
@@ -29,14 +36,22 @@ func (g *GUI) cursorDown(c *gocui.Gui, v *gocui.View) error {
 
 func (g *GUI) cursorUp(c *gocui.Gui, v *gocui.View) error {
 	if v != nil {
-		ox, oy := v.Origin()
-		cx, cy := v.Cursor()
-		if cy-1 < 0 {
+		if len(g.codeLines) == 0 {
 			return nil
 		}
 
-		if err := v.SetCursor(cx, cy-1); err != nil && oy > 0 {
-			if err := v.SetOrigin(ox, oy-1); err != nil {
+		ox, oy := v.Origin()
+		cx, cy := v.Cursor()
+
+		prevLine := g.codeLines.previous(cy)
+		firstLine := g.codeLines.first()
+
+		if prevLine.lineIdx < firstLine.lineIdx {
+			return nil
+		}
+
+		if err := v.SetCursor(cx, prevLine.lineIdx); err != nil && oy > 0 {
+			if err := v.SetOrigin(ox, firstLine.lineIdx); err != nil {
 				return err
 			}
 		}

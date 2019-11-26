@@ -2,8 +2,6 @@ package gui
 
 import (
 	"fmt"
-	"regexp"
-	"strings"
 
 	"github.com/Jeiwan/opscript/debugger"
 	"github.com/jroimartin/gocui"
@@ -17,8 +15,9 @@ const (
 
 // GUI ...
 type GUI struct {
-	cui      *gocui.Gui
-	debugger *debugger.Debugger
+	codeLines codeLines
+	cui       *gocui.Gui
+	debugger  *debugger.Debugger
 }
 
 // New returns a new GUI.
@@ -29,10 +28,12 @@ func New(debugger *debugger.Debugger) (*GUI, error) {
 	}
 
 	g := &GUI{
-		cui:      c,
-		debugger: debugger,
+		codeLines: []codeLine{},
+		cui:       c,
+		debugger:  debugger,
 	}
 
+	g.populateCodeLines()
 	c.SetManagerFunc(g.layout)
 	g.setKeybindings(c)
 
@@ -53,7 +54,7 @@ func (g GUI) Start() error {
 	return nil
 }
 
-func (g GUI) layout(c *gocui.Gui) error {
+func (g *GUI) layout(c *gocui.Gui) error {
 	maxX, maxY := c.Size()
 
 	if v, err := c.SetView(viewScript, 0, 0, int(0.5*float64(maxX))-1, maxY-1); err != nil {
@@ -65,13 +66,12 @@ func (g GUI) layout(c *gocui.Gui) error {
 		v.SelBgColor = gocui.ColorGreen
 		v.SelFgColor = gocui.ColorBlack
 
-		cx, cy := v.Cursor()
-		v.SetCursor(cx, cy)
+		g.renderCodeLines(v)
+
+		cx, _ := v.Cursor()
+		v.SetCursor(cx, g.codeLines.first().lineIdx)
 		c.SetCurrentView(viewScript)
 
-		for _, s := range g.debugger.Steps {
-			fmt.Fprintf(v, "%s\n", formatDisasm(s.Disasm))
-		}
 	}
 
 	if _, err := c.SetView(viewStack, int(0.5*float64(maxX)), 0, maxX-1, maxY-1); err != nil {
@@ -84,6 +84,47 @@ func (g GUI) layout(c *gocui.Gui) error {
 	}
 
 	return nil
+}
+
+func (g *GUI) populateCodeLines() {
+	g.codeLines = nil
+	curLine := 0
+
+	for _, s := range g.debugger.Steps {
+		if isFirstScriptLine(s.Disasm) {
+			var line codeLine
+			line.isSeparator = true
+			line.lineIdx = curLine
+
+			if isSignatureScript(s.Disasm) {
+				line.text = "      Signature Script\n"
+				curLine++
+
+			} else if isPubkeyScript(s.Disasm) {
+				line.text = "\n      Pubkey Script\n"
+				curLine += 2
+
+			} else if isWitnessScript(s.Disasm) {
+				line.text = "\n      Witness Script\n"
+				curLine += 2
+			}
+
+			g.codeLines = append(g.codeLines, line)
+		}
+
+		var line codeLine
+		line.lineIdx = curLine
+		line.text = fmt.Sprintln(formatDisasm(s.Disasm))
+
+		g.codeLines = append(g.codeLines, line)
+		curLine++
+	}
+}
+
+func (g *GUI) renderCodeLines(v *gocui.View) {
+	for _, cl := range g.codeLines {
+		fmt.Fprint(v, cl.text)
+	}
 }
 
 func (g GUI) setKeybindings(c *gocui.Gui) error {
@@ -120,18 +161,4 @@ func (g GUI) updateStack() error {
 
 func quit(g *gocui.Gui, v *gocui.View) error {
 	return gocui.ErrQuit
-}
-
-func formatDisasm(line string) string {
-	opData := regexp.MustCompile(`OP_DATA_\d+ `)
-	line = opData.ReplaceAllString(line, "")
-
-	parts := strings.SplitN(line, ":", 3)
-	if len(parts) != 3 {
-		return line
-	}
-
-	line = fmt.Sprintf("%s %s", parts[1], parts[2])
-
-	return line
 }
