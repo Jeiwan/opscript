@@ -97,15 +97,15 @@ func (g *GUI) populateCodeLines() {
 			line.lineIdx = curLine
 
 			if isSignatureScript(s.Disasm) {
-				line.text = "      Signature Script\n"
+				line.text = "        Signature Script\n"
 				curLine++
 
 			} else if isPubkeyScript(s.Disasm) {
-				line.text = "\n      Pubkey Script\n"
+				line.text = "\n        Pubkey Script\n"
 				curLine += 2
 
 			} else if isWitnessScript(s.Disasm) {
-				line.text = "\n      Witness Script\n"
+				line.text = "\n        Witness Script\n"
 				curLine += 2
 			}
 
@@ -153,7 +153,7 @@ func (g GUI) updateStack() error {
 
 	step := g.debugger.CurrentStep()
 	for i := range step.Stack {
-		fmt.Fprintf(v, "%x\n", step.Stack[len(step.Stack)-i-1])
+		fmt.Fprintf(v, " %x\n", step.Stack[len(step.Stack)-i-1])
 	}
 
 	return nil

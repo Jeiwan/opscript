@@ -85,7 +85,7 @@ func formatDisasm(line string) string {
 		return line
 	}
 
-	line = fmt.Sprintf("%s %s", parts[1], parts[2])
+	line = fmt.Sprintf(" %s  %s", parts[1], parts[2])
 
 	return line
 }

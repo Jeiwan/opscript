@@ -10,10 +10,10 @@ func TestFormatDisasm(t *testing.T) {
 	}{
 		{"data",
 			"00:0000: OP_DATA_3 deadbeef",
-			"0000  deadbeef"},
+			" 0000   deadbeef"},
 		{"op",
 			"00:0000: OP_1",
-			"0000  OP_1"},
+			" 0000   OP_1"},
 	}
 
 	for _, test := range tests {
