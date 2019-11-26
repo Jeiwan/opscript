@@ -3,6 +3,7 @@ package gui
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/Jeiwan/opscript/debugger"
 	"github.com/jroimartin/gocui"
@@ -124,6 +125,13 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 func formatDisasm(line string) string {
 	opData := regexp.MustCompile(`OP_DATA_\d+ `)
 	line = opData.ReplaceAllString(line, "")
+
+	parts := strings.SplitN(line, ":", 3)
+	if len(parts) != 3 {
+		return line
+	}
+
+	line = fmt.Sprintf("%s %s", parts[1], parts[2])
 
 	return line
 }
