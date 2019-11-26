@@ -2,6 +2,7 @@ package gui
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/Jeiwan/opscript/debugger"
 	"github.com/jroimartin/gocui"
@@ -68,7 +69,7 @@ func (g GUI) layout(c *gocui.Gui) error {
 		c.SetCurrentView(viewScript)
 
 		for _, s := range g.debugger.Steps {
-			fmt.Fprintf(v, "%s\n", formatOpcode(s.Disasm))
+			fmt.Fprintf(v, "%s\n", formatDisasm(s.Disasm))
 		}
 	}
 
@@ -118,4 +119,11 @@ func (g GUI) updateStack() error {
 
 func quit(g *gocui.Gui, v *gocui.View) error {
 	return gocui.ErrQuit
+}
+
+func formatDisasm(line string) string {
+	opData := regexp.MustCompile(`OP_DATA_\d+ `)
+	line = opData.ReplaceAllString(line, "")
+
+	return line
 }
