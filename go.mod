@@ -3,6 +3,7 @@ module github.com/Jeiwan/opscript
 go 1.12
 
 require (
+	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/btcsuite/btcd v0.20.1-beta
 	github.com/jroimartin/gocui v0.4.0
 	github.com/mattn/go-runewidth v0.0.6 // indirect

@@ -1,1 +1,938 @@
-{"N/A":{"word":"N/A","opcode":"","input":"","output":"","short":"bytes is data to be pushed onto the stack"},"OP_0, OP_FALSE":{"word":"OP_0, OP_FALSE","opcode":"","input":"","output":"","short":"An empty array of bytes is pushed onto the stack. (This is not a no-op: an item is added to the stack.)"},"OP_0NOTEQUAL":{"word":"OP_0NOTEQUAL","opcode":"","input":"","output":"","short":"Returns 0 if the input is 0. 1 otherwise."},"OP_1, OP_TRUE":{"word":"OP_1, OP_TRUE","opcode":"","input":"","output":"","short":"The number 1 is pushed onto the stack."},"OP_1ADD":{"word":"OP_1ADD","opcode":"","input":"","output":"","short":"1 is added to the input."},"OP_1NEGATE":{"word":"OP_1NEGATE","opcode":"","input":"","output":"","short":"The number -1 is pushed onto the stack."},"OP_1SUB":{"word":"OP_1SUB","opcode":"","input":"","output":"","short":"1 is subtracted from the input."},"OP_2-OP_16":{"word":"OP_2-OP_16","opcode":"","input":"","output":"","short":"The number in the word name (2-16) is pushed onto the stack."},"OP_2DIV":{"word":"OP_2DIV","opcode":"","input":"","output":"","short":""},"OP_2DROP":{"word":"OP_2DROP","opcode":"","input":"","output":"","short":"Removes the top two stack items."},"OP_2DUP":{"word":"OP_2DUP","opcode":"","input":"","output":"","short":"Duplicates the top two stack items."},"OP_2MUL":{"word":"OP_2MUL","opcode":"","input":"","output":"","short":""},"OP_2OVER":{"word":"OP_2OVER","opcode":"","input":"","output":"","short":"Copies the pair of items two spaces back in the stack to the front."},"OP_2ROT":{"word":"OP_2ROT","opcode":"","input":"","output":"","short":"The fifth and sixth items back are moved to the top of the stack."},"OP_2SWAP":{"word":"OP_2SWAP","opcode":"","input":"","output":"","short":"Swaps the top two pairs of items."},"OP_3DUP":{"word":"OP_3DUP","opcode":"","input":"","output":"","short":"Duplicates the top three stack items."},"OP_ABS":{"word":"OP_ABS","opcode":"","input":"","output":"","short":"The input is made positive."},"OP_ADD":{"word":"OP_ADD","opcode":"","input":"","output":"","short":"a is added to b."},"OP_AND":{"word":"OP_AND","opcode":"","input":"","output":"","short":""},"OP_BOOLAND":{"word":"OP_BOOLAND","opcode":"","input":"","output":"","short":"If both a and b are not 0, the output is 1. Otherwise 0."},"OP_BOOLOR":{"word":"OP_BOOLOR","opcode":"","input":"","output":"","short":"If a or b is not 0, the output is 1. Otherwise 0."},"OP_CAT":{"word":"OP_CAT","opcode":"","input":"","output":"","short":""},"OP_CHECKLOCKTIMEVERIFY (previously OP_NOP2)":{"word":"OP_CHECKLOCKTIMEVERIFY (previously OP_NOP2)","opcode":"","input":"","output":"","short":"."},"OP_CHECKMULTISIG":{"word":"OP_CHECKMULTISIG","opcode":"","input":"","output":"","short":"Compares the first signature against each public key until it finds an ECDSA match. Starting with the subsequent public key, it compares the second signature against each remaining public key until it finds an ECDSA match. The process is repeated until all signatures have been checked or not enough public keys remain to produce a successful result. All signatures need to match a public key. Because public keys are not checked again if they fail any signature comparison, signatures must be placed in the scriptSig using the same order as their corresponding public keys were placed in the scriptPubKey or redeemScript. If all signatures are valid, 1 is returned, 0 otherwise. Due to a bug, one extra unused value is removed from the stack."},"OP_CHECKMULTISIGVERIFY":{"word":"OP_CHECKMULTISIGVERIFY","opcode":"","input":"","output":"","short":"Same as OP_CHECKMULTISIG, but OP_VERIFY is executed afterward."},"OP_CHECKSEQUENCEVERIFY (previously OP_NOP3)":{"word":"OP_CHECKSEQUENCEVERIFY (previously OP_NOP3)","opcode":"","input":"","output":"","short":"."},"OP_CHECKSIG":{"word":"OP_CHECKSIG","opcode":"","input":"","output":"","short":"The entire transaction's outputs, inputs, and script (from the most recently-executed OP_CODESEPARATOR to the end) are hashed. The signature used by OP_CHECKSIG must be a valid signature for this hash and public key. If it is, 1 is returned, 0 otherwise."},"OP_CHECKSIGVERIFY":{"word":"OP_CHECKSIGVERIFY","opcode":"","input":"","output":"","short":"Same as OP_CHECKSIG, but OP_VERIFY is executed afterward."},"OP_CODESEPARATOR":{"word":"OP_CODESEPARATOR","opcode":"","input":"","output":"","short":"All of the signature checking words will only match signatures to the data after the most recently-executed OP_CODESEPARATOR."},"OP_DEPTH":{"word":"OP_DEPTH","opcode":"","input":"","output":"","short":"Puts the number of stack items onto the stack."},"OP_DIV":{"word":"OP_DIV","opcode":"","input":"","output":"","short":""},"OP_DROP":{"word":"OP_DROP","opcode":"","input":"","output":"","short":"Removes the top stack item."},"OP_DUP":{"word":"OP_DUP","opcode":"","input":"","output":"","short":"Duplicates the top stack item."},"OP_ELSE":{"word":"OP_ELSE","opcode":"","input":"","output":"","short":"If the preceding OP_IF or OP_NOTIF or OP_ELSE was not executed then these statements are and if the preceding OP_IF or OP_NOTIF or OP_ELSE was executed then these statements are not."},"OP_ENDIF":{"word":"OP_ENDIF","opcode":"","input":"","output":"","short":"."},"OP_EQUAL":{"word":"OP_EQUAL","opcode":"","input":"","output":"","short":"Returns 1 if the inputs are exactly equal, 0 otherwise."},"OP_EQUALVERIFY":{"word":"OP_EQUALVERIFY","opcode":"","input":"","output":"","short":"Same as OP_EQUAL, but runs OP_VERIFY afterward."},"OP_FROMALTSTACK":{"word":"OP_FROMALTSTACK","opcode":"","input":"","output":"","short":"Puts the input onto the top of the main stack. Removes it from the alt stack."},"OP_GREATERTHAN":{"word":"OP_GREATERTHAN","opcode":"","input":"","output":"","short":"Returns 1 if a is greater than b, 0 otherwise."},"OP_GREATERTHANOREQUAL":{"word":"OP_GREATERTHANOREQUAL","opcode":"","input":"","output":"","short":"Returns 1 if a is greater than or equal to b, 0 otherwise."},"OP_HASH160":{"word":"OP_HASH160","opcode":"","input":"","output":"","short":"The input is hashed twice: first with SHA-256 and then with RIPEMD-160."},"OP_HASH256":{"word":"OP_HASH256","opcode":"","input":"","output":"","short":"The input is hashed two times with SHA-256."},"OP_IF":{"word":"OP_IF","opcode":"","input":"","output":"","short":"If the top stack value is not False, the statements are executed. The top stack value is removed."},"OP_IFDUP":{"word":"OP_IFDUP","opcode":"","input":"","output":"","short":"If the top stack value is not 0, duplicate it."},"OP_INVALIDOPCODE":{"word":"OP_INVALIDOPCODE","opcode":"","input":"","output":"","short":"Matches any opcode that is not yet assigned."},"OP_INVERT":{"word":"OP_INVERT","opcode":"","input":"","output":"","short":""},"OP_LEFT":{"word":"OP_LEFT","opcode":"","input":"","output":"","short":""},"OP_LESSTHAN":{"word":"OP_LESSTHAN","opcode":"","input":"","output":"","short":"Returns 1 if a is less than b, 0 otherwise."},"OP_LESSTHANOREQUAL":{"word":"OP_LESSTHANOREQUAL","opcode":"","input":"","output":"","short":"Returns 1 if a is less than or equal to b, 0 otherwise."},"OP_LSHIFT":{"word":"OP_LSHIFT","opcode":"","input":"","output":"","short":""},"OP_MAX":{"word":"OP_MAX","opcode":"","input":"","output":"","short":"Returns the larger of a and b."},"OP_MIN":{"word":"OP_MIN","opcode":"","input":"","output":"","short":"Returns the smaller of a and b."},"OP_MOD":{"word":"OP_MOD","opcode":"","input":"","output":"","short":""},"OP_MUL":{"word":"OP_MUL","opcode":"","input":"","output":"","short":""},"OP_NEGATE":{"word":"OP_NEGATE","opcode":"","input":"","output":"","short":"The sign of the input is flipped."},"OP_NIP":{"word":"OP_NIP","opcode":"","input":"","output":"","short":"Removes the second-to-top stack item."},"OP_NOP":{"word":"OP_NOP","opcode":"","input":"","output":"","short":"Does nothing."},"OP_NOP1, OP_NOP4-OP_NOP10":{"word":"OP_NOP1, OP_NOP4-OP_NOP10","opcode":"","input":"","output":"","short":"The word is ignored. Does not mark transaction as invalid."},"OP_NOT":{"word":"OP_NOT","opcode":"","input":"","output":"","short":"If the input is 0 or 1, it is flipped. Otherwise the output will be 0."},"OP_NOTIF":{"word":"OP_NOTIF","opcode":"","input":"","output":"","short":"If the top stack value is False, the statements are executed. The top stack value is removed."},"OP_NUMEQUAL":{"word":"OP_NUMEQUAL","opcode":"","input":"","output":"","short":"Returns 1 if the numbers are equal, 0 otherwise."},"OP_NUMEQUALVERIFY":{"word":"OP_NUMEQUALVERIFY","opcode":"","input":"","output":"","short":"Same as OP_NUMEQUAL, but runs OP_VERIFY afterward."},"OP_NUMNOTEQUAL":{"word":"OP_NUMNOTEQUAL","opcode":"","input":"","output":"","short":"Returns 1 if the numbers are not equal, 0 otherwise."},"OP_OR":{"word":"OP_OR","opcode":"","input":"","output":"","short":""},"OP_OVER":{"word":"OP_OVER","opcode":"","input":"","output":"","short":"Copies the second-to-top stack item to the top."},"OP_PICK":{"word":"OP_PICK","opcode":"","input":"","output":"","short":"back in the stack is copied to the top."},"OP_PUBKEY":{"word":"OP_PUBKEY","opcode":"","input":"","output":"","short":"Represents a public key compatible with OP_CHECKSIG."},"OP_PUBKEYHASH":{"word":"OP_PUBKEYHASH","opcode":"","input":"","output":"","short":"Represents a public key hashed with OP_HASH160."},"OP_PUSHDATA1":{"word":"OP_PUSHDATA1","opcode":"","input":"","output":"","short":"The next byte contains the number of bytes to be pushed onto the stack."},"OP_PUSHDATA2":{"word":"OP_PUSHDATA2","opcode":"","input":"","output":"","short":"The next two bytes contain the number of bytes to be pushed onto the stack in little endian order."},"OP_PUSHDATA4":{"word":"OP_PUSHDATA4","opcode":"","input":"","output":"","short":"The next four bytes contain the number of bytes to be pushed onto the stack in little endian order."},"OP_RESERVED":{"word":"OP_RESERVED","opcode":"","input":"","output":"","short":"unless occuring in an unexecuted OP_IF branch"},"OP_RESERVED1":{"word":"OP_RESERVED1","opcode":"","input":"","output":"","short":"unless occuring in an unexecuted OP_IF branch"},"OP_RESERVED2":{"word":"OP_RESERVED2","opcode":"","input":"","output":"","short":"unless occuring in an unexecuted OP_IF branch"},"OP_RETURN":{"word":"OP_RETURN","opcode":"","input":"","output":"","short":") after the OP_RETURN provided the total scriptPubKey length is at most 83 bytes."},"OP_RIGHT":{"word":"OP_RIGHT","opcode":"","input":"","output":"","short":""},"OP_RIPEMD160":{"word":"OP_RIPEMD160","opcode":"","input":"","output":"","short":"The input is hashed using RIPEMD-160."},"OP_ROLL":{"word":"OP_ROLL","opcode":"","input":"","output":"","short":"back in the stack is moved to the top."},"OP_ROT":{"word":"OP_ROT","opcode":"","input":"","output":"","short":"The top three items on the stack are rotated to the left."},"OP_RSHIFT":{"word":"OP_RSHIFT","opcode":"","input":"","output":"","short":""},"OP_SHA1":{"word":"OP_SHA1","opcode":"","input":"","output":"","short":"The input is hashed using SHA-1."},"OP_SHA256":{"word":"OP_SHA256","opcode":"","input":"","output":"","short":"The input is hashed using SHA-256."},"OP_SIZE":{"word":"OP_SIZE","opcode":"","input":"","output":"","short":"Pushes the string length of the top element of the stack (without popping it)."},"OP_SUB":{"word":"OP_SUB","opcode":"","input":"","output":"","short":"b is subtracted from a."},"OP_SUBSTR":{"word":"OP_SUBSTR","opcode":"","input":"","output":"","short":""},"OP_SWAP":{"word":"OP_SWAP","opcode":"","input":"","output":"","short":"The top two items on the stack are swapped."},"OP_TOALTSTACK":{"word":"OP_TOALTSTACK","opcode":"","input":"","output":"","short":"Puts the input onto the top of the alt stack. Removes it from the main stack."},"OP_TUCK":{"word":"OP_TUCK","opcode":"","input":"","output":"","short":"The item at the top of the stack is copied and inserted before the second-to-top item."},"OP_VER":{"word":"OP_VER","opcode":"","input":"","output":"","short":"unless occuring in an unexecuted OP_IF branch"},"OP_VERIF":{"word":"OP_VERIF","opcode":"","input":"","output":"","short":""},"OP_VERIFY":{"word":"OP_VERIFY","opcode":"","input":"","output":"","short":"if top stack value is not true. The top stack value is removed."},"OP_VERNOTIF":{"word":"OP_VERNOTIF","opcode":"","input":"","output":"","short":""},"OP_WITHIN":{"word":"OP_WITHIN","opcode":"","input":"","output":"","short":"Returns 1 if x is within the specified range (left-inclusive), 0 otherwise."},"OP_XOR":{"word":"OP_XOR","opcode":"","input":"","output":"","short":""}}
+{
+    "OP_0": {
+        "word": "OP_0",
+        "word_alt": "OP_FALSE",
+        "opcode": "0x00",
+        "input": "Nothing.",
+        "output": "(empty value)",
+        "short": "An empty array of bytes is pushed onto the stack. (This is not a no-op: an item is added to the stack.)"
+    },
+    "OP_0NOTEQUAL": {
+        "word": "OP_0NOTEQUAL",
+        "word_alt": "",
+        "opcode": "0x92",
+        "input": "in",
+        "output": "out",
+        "short": "Returns 0 if the input is 0. 1 otherwise."
+    },
+    "OP_1": {
+        "word": "OP_1",
+        "word_alt": "OP_TRUE",
+        "opcode": "0x51",
+        "input": "Nothing.",
+        "output": "1",
+        "short": "The number 1 is pushed onto the stack."
+    },
+    "OP_10": {
+        "word": "OP_10",
+        "word_alt": "",
+        "opcode": "0x5a",
+        "input": "Nothing.",
+        "output": "10",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_11": {
+        "word": "OP_11",
+        "word_alt": "",
+        "opcode": "0x5b",
+        "input": "Nothing.",
+        "output": "11",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_12": {
+        "word": "OP_12",
+        "word_alt": "",
+        "opcode": "0x5c",
+        "input": "Nothing.",
+        "output": "12",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_13": {
+        "word": "OP_13",
+        "word_alt": "",
+        "opcode": "0x5d",
+        "input": "Nothing.",
+        "output": "13",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_14": {
+        "word": "OP_14",
+        "word_alt": "",
+        "opcode": "0x5e",
+        "input": "Nothing.",
+        "output": "14",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_15": {
+        "word": "OP_15",
+        "word_alt": "",
+        "opcode": "0x5f",
+        "input": "Nothing.",
+        "output": "15",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_16": {
+        "word": "OP_16",
+        "word_alt": "",
+        "opcode": "0x60",
+        "input": "Nothing.",
+        "output": "16",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_1ADD": {
+        "word": "OP_1ADD",
+        "word_alt": "",
+        "opcode": "0x8b",
+        "input": "in",
+        "output": "out",
+        "short": "1 is added to the input."
+    },
+    "OP_1NEGATE": {
+        "word": "OP_1NEGATE",
+        "word_alt": "",
+        "opcode": "0x4f",
+        "input": "Nothing.",
+        "output": "-1",
+        "short": "The number -1 is pushed onto the stack."
+    },
+    "OP_1SUB": {
+        "word": "OP_1SUB",
+        "word_alt": "",
+        "opcode": "0x8c",
+        "input": "in",
+        "output": "out",
+        "short": "1 is subtracted from the input."
+    },
+    "OP_2": {
+        "word": "OP_2",
+        "word_alt": "",
+        "opcode": "0x52",
+        "input": "Nothing.",
+        "output": "2",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_2-OP_16": {
+        "word": "OP_2-OP_16",
+        "word_alt": "",
+        "opcode": "0x52-0x60",
+        "input": "Nothing.",
+        "output": "2-16",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_2DIV": {
+        "word": "OP_2DIV",
+        "word_alt": "",
+        "opcode": "0x8e",
+        "input": "in",
+        "output": "out",
+        "short": "The input is divided by 2. disabled."
+    },
+    "OP_2DROP": {
+        "word": "OP_2DROP",
+        "word_alt": "",
+        "opcode": "0x6d",
+        "input": "x1 x2",
+        "output": "Nothing",
+        "short": "Removes the top two stack items."
+    },
+    "OP_2DUP": {
+        "word": "OP_2DUP",
+        "word_alt": "",
+        "opcode": "0x6e",
+        "input": "x1 x2",
+        "output": "x1 x2 x1 x2",
+        "short": "Duplicates the top two stack items."
+    },
+    "OP_2MUL": {
+        "word": "OP_2MUL",
+        "word_alt": "",
+        "opcode": "0x8d",
+        "input": "in",
+        "output": "out",
+        "short": "The input is multiplied by 2. disabled."
+    },
+    "OP_2OVER": {
+        "word": "OP_2OVER",
+        "word_alt": "",
+        "opcode": "0x70",
+        "input": "x1 x2 x3 x4",
+        "output": "x1 x2 x3 x4 x1 x2",
+        "short": "Copies the pair of items two spaces back in the stack to the front."
+    },
+    "OP_2ROT": {
+        "word": "OP_2ROT",
+        "word_alt": "",
+        "opcode": "0x71",
+        "input": "x1 x2 x3 x4 x5 x6",
+        "output": "x3 x4 x5 x6 x1 x2",
+        "short": "The fifth and sixth items back are moved to the top of the stack."
+    },
+    "OP_2SWAP": {
+        "word": "OP_2SWAP",
+        "word_alt": "",
+        "opcode": "0x72",
+        "input": "x1 x2 x3 x4",
+        "output": "x3 x4 x1 x2",
+        "short": "Swaps the top two pairs of items."
+    },
+    "OP_3": {
+        "word": "OP_3",
+        "word_alt": "",
+        "opcode": "0x53",
+        "input": "Nothing.",
+        "output": "3",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_3DUP": {
+        "word": "OP_3DUP",
+        "word_alt": "",
+        "opcode": "0x6f",
+        "input": "x1 x2 x3",
+        "output": "x1 x2 x3 x1 x2 x3",
+        "short": "Duplicates the top three stack items."
+    },
+    "OP_4": {
+        "word": "OP_4",
+        "word_alt": "",
+        "opcode": "0x54",
+        "input": "Nothing.",
+        "output": "4",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_5": {
+        "word": "OP_5",
+        "word_alt": "",
+        "opcode": "0x55",
+        "input": "Nothing.",
+        "output": "5",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_6": {
+        "word": "OP_6",
+        "word_alt": "",
+        "opcode": "0x56",
+        "input": "Nothing.",
+        "output": "6",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_7": {
+        "word": "OP_7",
+        "word_alt": "",
+        "opcode": "0x57",
+        "input": "Nothing.",
+        "output": "7",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_8": {
+        "word": "OP_8",
+        "word_alt": "",
+        "opcode": "0x58",
+        "input": "Nothing.",
+        "output": "8",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_9": {
+        "word": "OP_9",
+        "word_alt": "",
+        "opcode": "0x59",
+        "input": "Nothing.",
+        "output": "9",
+        "short": "The number in the word name (2-16) is pushed onto the stack."
+    },
+    "OP_ABS": {
+        "word": "OP_ABS",
+        "word_alt": "",
+        "opcode": "0x90",
+        "input": "in",
+        "output": "out",
+        "short": "The input is made positive."
+    },
+    "OP_ADD": {
+        "word": "OP_ADD",
+        "word_alt": "",
+        "opcode": "0x93",
+        "input": "a b",
+        "output": "out",
+        "short": "a is added to b."
+    },
+    "OP_AND": {
+        "word": "OP_AND",
+        "word_alt": "",
+        "opcode": "0x84",
+        "input": "x1 x2",
+        "output": "out",
+        "short": "Boolean and between each bit in the inputs. disabled."
+    },
+    "OP_BOOLAND": {
+        "word": "OP_BOOLAND",
+        "word_alt": "",
+        "opcode": "0x9a",
+        "input": "a b",
+        "output": "out",
+        "short": "If both a and b are not 0, the output is 1. Otherwise 0."
+    },
+    "OP_BOOLOR": {
+        "word": "OP_BOOLOR",
+        "word_alt": "",
+        "opcode": "0x9b",
+        "input": "a b",
+        "output": "out",
+        "short": "If a or b is not 0, the output is 1. Otherwise 0."
+    },
+    "OP_CAT": {
+        "word": "OP_CAT",
+        "word_alt": "",
+        "opcode": "0x7e",
+        "input": "x1 x2",
+        "output": "out",
+        "short": "Concatenates two strings. disabled."
+    },
+    "OP_CHECKLOCKTIMEVERIFY": {
+        "word": "OP_CHECKLOCKTIMEVERIFY",
+        "word_alt": "",
+        "opcode": "0xb1",
+        "input": "x",
+        "output": "x / fail",
+        "short": "Marks transaction as invalid if the top stack item is greater than the transaction's nLockTime field, otherwise script evaluation continues as though an OP_NOP was executed. Transaction is also invalid if 1. the stack is empty; or 2. the top stack item is negative; or 3. the top stack item is greater than or equal to 500000000 while the transaction's nLockTime field is less than 500000000, or vice versa; or 4. the input's nSequence field is equal to 0xffffffff. The precise semantics are described in BIP 0065."
+    },
+    "OP_CHECKMULTISIG": {
+        "word": "OP_CHECKMULTISIG",
+        "word_alt": "",
+        "opcode": "0xae",
+        "input": "x sig1 sig2 ... \u003cnumber of signatures\u003e pub1 pub2 \u003cnumber of public keys\u003e",
+        "output": "True / False",
+        "short": "Compares the first signature against each public key until it finds an ECDSA match. Starting with the subsequent public key, it compares the second signature against each remaining public key until it finds an ECDSA match. The process is repeated until all signatures have been checked or not enough public keys remain to produce a successful result. All signatures need to match a public key. Because public keys are not checked again if they fail any signature comparison, signatures must be placed in the scriptSig using the same order as their corresponding public keys were placed in the scriptPubKey or redeemScript. If all signatures are valid, 1 is returned, 0 otherwise. Due to a bug, one extra unused value is removed from the stack."
+    },
+    "OP_CHECKMULTISIGVERIFY": {
+        "word": "OP_CHECKMULTISIGVERIFY",
+        "word_alt": "",
+        "opcode": "0xaf",
+        "input": "x sig1 sig2 ... \u003cnumber of signatures\u003e pub1 pub2 ... \u003cnumber of public keys\u003e",
+        "output": "Nothing / fail",
+        "short": "Same as OP_CHECKMULTISIG, but OP_VERIFY is executed afterward."
+    },
+    "OP_CHECKSEQUENCEVERIFY": {
+        "word": "OP_CHECKSEQUENCEVERIFY",
+        "word_alt": "",
+        "opcode": "0xb2",
+        "input": "x",
+        "output": "x / fail",
+        "short": "Marks transaction as invalid if the relative lock time of the input (enforced by BIP 0068 with nSequence) is not equal to or longer than the value of the top stack item. The precise semantics are described in BIP 0112."
+    },
+    "OP_CHECKSIG": {
+        "word": "OP_CHECKSIG",
+        "word_alt": "",
+        "opcode": "0xac",
+        "input": "sig pubkey",
+        "output": "True / false",
+        "short": "The entire transaction's outputs, inputs, and script (from the most recently-executed OP_CODESEPARATOR to the end) are hashed. The signature used by OP_CHECKSIG must be a valid signature for this hash and public key. If it is, 1 is returned, 0 otherwise."
+    },
+    "OP_CHECKSIGVERIFY": {
+        "word": "OP_CHECKSIGVERIFY",
+        "word_alt": "",
+        "opcode": "0xad",
+        "input": "sig pubkey",
+        "output": "Nothing / fail",
+        "short": "Same as OP_CHECKSIG, but OP_VERIFY is executed afterward."
+    },
+    "OP_CODESEPARATOR": {
+        "word": "OP_CODESEPARATOR",
+        "word_alt": "",
+        "opcode": "0xab",
+        "input": "Nothing",
+        "output": "Nothing",
+        "short": "All of the signature checking words will only match signatures to the data after the most recently-executed OP_CODESEPARATOR."
+    },
+    "OP_DEPTH": {
+        "word": "OP_DEPTH",
+        "word_alt": "",
+        "opcode": "0x74",
+        "input": "Nothing",
+        "output": "\u003cStack size\u003e",
+        "short": "Puts the number of stack items onto the stack."
+    },
+    "OP_DIV": {
+        "word": "OP_DIV",
+        "word_alt": "",
+        "opcode": "0x96",
+        "input": "a b",
+        "output": "out",
+        "short": "a is divided by b. disabled."
+    },
+    "OP_DROP": {
+        "word": "OP_DROP",
+        "word_alt": "",
+        "opcode": "0x75",
+        "input": "x",
+        "output": "Nothing",
+        "short": "Removes the top stack item."
+    },
+    "OP_DUP": {
+        "word": "OP_DUP",
+        "word_alt": "",
+        "opcode": "0x76",
+        "input": "x",
+        "output": "x x",
+        "short": "Duplicates the top stack item."
+    },
+    "OP_ELSE": {
+        "word": "OP_ELSE",
+        "word_alt": "",
+        "opcode": "0x67",
+        "input": "",
+        "output": "",
+        "short": "If the preceding OP_IF or OP_NOTIF or OP_ELSE was not executed then these statements are and if the preceding OP_IF or OP_NOTIF or OP_ELSE was executed then these statements are not."
+    },
+    "OP_ENDIF": {
+        "word": "OP_ENDIF",
+        "word_alt": "",
+        "opcode": "0x68",
+        "input": "",
+        "output": "",
+        "short": "Ends an if/else block. All blocks must end, or the transaction is invalid. An OP_ENDIF without OP_IF earlier is also invalid."
+    },
+    "OP_EQUAL": {
+        "word": "OP_EQUAL",
+        "word_alt": "",
+        "opcode": "0x87",
+        "input": "x1 x2",
+        "output": "True / false",
+        "short": "Returns 1 if the inputs are exactly equal, 0 otherwise."
+    },
+    "OP_EQUALVERIFY": {
+        "word": "OP_EQUALVERIFY",
+        "word_alt": "",
+        "opcode": "0x88",
+        "input": "x1 x2",
+        "output": "Nothing / fail",
+        "short": "Same as OP_EQUAL, but runs OP_VERIFY afterward."
+    },
+    "OP_FALSE": {
+        "word": "OP_FALSE",
+        "word_alt": "OP_0",
+        "opcode": "0x00",
+        "input": "Nothing.",
+        "output": "(empty value)",
+        "short": "An empty array of bytes is pushed onto the stack. (This is not a no-op: an item is added to the stack.)"
+    },
+    "OP_FROMALTSTACK": {
+        "word": "OP_FROMALTSTACK",
+        "word_alt": "",
+        "opcode": "0x6c",
+        "input": "(alt)x1",
+        "output": "x1",
+        "short": "Puts the input onto the top of the main stack. Removes it from the alt stack."
+    },
+    "OP_GREATERTHAN": {
+        "word": "OP_GREATERTHAN",
+        "word_alt": "",
+        "opcode": "0xa0",
+        "input": "a b",
+        "output": "out",
+        "short": "Returns 1 if a is greater than b, 0 otherwise."
+    },
+    "OP_GREATERTHANOREQUAL": {
+        "word": "OP_GREATERTHANOREQUAL",
+        "word_alt": "",
+        "opcode": "0xa2",
+        "input": "a b",
+        "output": "out",
+        "short": "Returns 1 if a is greater than or equal to b, 0 otherwise."
+    },
+    "OP_HASH160": {
+        "word": "OP_HASH160",
+        "word_alt": "",
+        "opcode": "0xa9",
+        "input": "in",
+        "output": "hash",
+        "short": "The input is hashed twice: first with SHA-256 and then with RIPEMD-160."
+    },
+    "OP_HASH256": {
+        "word": "OP_HASH256",
+        "word_alt": "",
+        "opcode": "0xaa",
+        "input": "in",
+        "output": "hash",
+        "short": "The input is hashed two times with SHA-256."
+    },
+    "OP_IF": {
+        "word": "OP_IF",
+        "word_alt": "",
+        "opcode": "0x63",
+        "input": "",
+        "output": "",
+        "short": "If the top stack value is not False, the statements are executed. The top stack value is removed."
+    },
+    "OP_IFDUP": {
+        "word": "OP_IFDUP",
+        "word_alt": "",
+        "opcode": "0x73",
+        "input": "x",
+        "output": "x / x x",
+        "short": "If the top stack value is not 0, duplicate it."
+    },
+    "OP_INVALIDOPCODE": {
+        "word": "OP_INVALIDOPCODE",
+        "word_alt": "",
+        "opcode": "0xff",
+        "input": "",
+        "output": "",
+        "short": "Matches any opcode that is not yet assigned."
+    },
+    "OP_INVERT": {
+        "word": "OP_INVERT",
+        "word_alt": "",
+        "opcode": "0x83",
+        "input": "in",
+        "output": "out",
+        "short": "Flips all of the bits in the input. disabled."
+    },
+    "OP_LEFT": {
+        "word": "OP_LEFT",
+        "word_alt": "",
+        "opcode": "0x80",
+        "input": "in size",
+        "output": "out",
+        "short": "Keeps only characters left of the specified point in a string. disabled."
+    },
+    "OP_LESSTHAN": {
+        "word": "OP_LESSTHAN",
+        "word_alt": "",
+        "opcode": "0x9f",
+        "input": "a b",
+        "output": "out",
+        "short": "Returns 1 if a is less than b, 0 otherwise."
+    },
+    "OP_LESSTHANOREQUAL": {
+        "word": "OP_LESSTHANOREQUAL",
+        "word_alt": "",
+        "opcode": "0xa1",
+        "input": "a b",
+        "output": "out",
+        "short": "Returns 1 if a is less than or equal to b, 0 otherwise."
+    },
+    "OP_LSHIFT": {
+        "word": "OP_LSHIFT",
+        "word_alt": "",
+        "opcode": "0x98",
+        "input": "a b",
+        "output": "out",
+        "short": "Shifts a left b bits, preserving sign. disabled."
+    },
+    "OP_MAX": {
+        "word": "OP_MAX",
+        "word_alt": "",
+        "opcode": "0xa4",
+        "input": "a b",
+        "output": "out",
+        "short": "Returns the larger of a and b."
+    },
+    "OP_MIN": {
+        "word": "OP_MIN",
+        "word_alt": "",
+        "opcode": "0xa3",
+        "input": "a b",
+        "output": "out",
+        "short": "Returns the smaller of a and b."
+    },
+    "OP_MOD": {
+        "word": "OP_MOD",
+        "word_alt": "",
+        "opcode": "0x97",
+        "input": "a b",
+        "output": "out",
+        "short": "Returns the remainder after dividing a by b. disabled."
+    },
+    "OP_MUL": {
+        "word": "OP_MUL",
+        "word_alt": "",
+        "opcode": "0x95",
+        "input": "a b",
+        "output": "out",
+        "short": "a is multiplied by b. disabled."
+    },
+    "OP_NEGATE": {
+        "word": "OP_NEGATE",
+        "word_alt": "",
+        "opcode": "0x8f",
+        "input": "in",
+        "output": "out",
+        "short": "The sign of the input is flipped."
+    },
+    "OP_NIP": {
+        "word": "OP_NIP",
+        "word_alt": "",
+        "opcode": "0x77",
+        "input": "x1 x2",
+        "output": "x2",
+        "short": "Removes the second-to-top stack item."
+    },
+    "OP_NOP": {
+        "word": "OP_NOP",
+        "word_alt": "",
+        "opcode": "0x61",
+        "input": "Nothing",
+        "output": "Nothing",
+        "short": "Does nothing."
+    },
+    "OP_NOP1": {
+        "word": "OP_NOP1",
+        "word_alt": "",
+        "opcode": "0xb0, 0xb3-0xb9",
+        "input": "",
+        "output": "",
+        "short": "The word is ignored. Does not mark transaction as invalid."
+    },
+    "OP_NOP10": {
+        "word": "OP_NOP10",
+        "word_alt": "",
+        "opcode": "0xb9",
+        "input": "",
+        "output": "",
+        "short": "The word is ignored. Does not mark transaction as invalid."
+    },
+    "OP_NOP4": {
+        "word": "OP_NOP4",
+        "word_alt": "",
+        "opcode": "0xb3",
+        "input": "",
+        "output": "",
+        "short": "The word is ignored. Does not mark transaction as invalid."
+    },
+    "OP_NOP5": {
+        "word": "OP_NOP5",
+        "word_alt": "",
+        "opcode": "0xb4",
+        "input": "",
+        "output": "",
+        "short": "The word is ignored. Does not mark transaction as invalid."
+    },
+    "OP_NOP6": {
+        "word": "OP_NOP6",
+        "word_alt": "",
+        "opcode": "0xb5",
+        "input": "",
+        "output": "",
+        "short": "The word is ignored. Does not mark transaction as invalid."
+    },
+    "OP_NOP7": {
+        "word": "OP_NOP7",
+        "word_alt": "",
+        "opcode": "0xb6",
+        "input": "",
+        "output": "",
+        "short": "The word is ignored. Does not mark transaction as invalid."
+    },
+    "OP_NOP8": {
+        "word": "OP_NOP8",
+        "word_alt": "",
+        "opcode": "0xb7",
+        "input": "",
+        "output": "",
+        "short": "The word is ignored. Does not mark transaction as invalid."
+    },
+    "OP_NOP9": {
+        "word": "OP_NOP9",
+        "word_alt": "",
+        "opcode": "0xb8",
+        "input": "",
+        "output": "",
+        "short": "The word is ignored. Does not mark transaction as invalid."
+    },
+    "OP_NOT": {
+        "word": "OP_NOT",
+        "word_alt": "",
+        "opcode": "0x91",
+        "input": "in",
+        "output": "out",
+        "short": "If the input is 0 or 1, it is flipped. Otherwise the output will be 0."
+    },
+    "OP_NOTIF": {
+        "word": "OP_NOTIF",
+        "word_alt": "",
+        "opcode": "0x64",
+        "input": "",
+        "output": "",
+        "short": "If the top stack value is False, the statements are executed. The top stack value is removed."
+    },
+    "OP_NUMEQUAL": {
+        "word": "OP_NUMEQUAL",
+        "word_alt": "",
+        "opcode": "0x9c",
+        "input": "a b",
+        "output": "out",
+        "short": "Returns 1 if the numbers are equal, 0 otherwise."
+    },
+    "OP_NUMEQUALVERIFY": {
+        "word": "OP_NUMEQUALVERIFY",
+        "word_alt": "",
+        "opcode": "0x9d",
+        "input": "a b",
+        "output": "Nothing / fail",
+        "short": "Same as OP_NUMEQUAL, but runs OP_VERIFY afterward."
+    },
+    "OP_NUMNOTEQUAL": {
+        "word": "OP_NUMNOTEQUAL",
+        "word_alt": "",
+        "opcode": "0x9e",
+        "input": "a b",
+        "output": "out",
+        "short": "Returns 1 if the numbers are not equal, 0 otherwise."
+    },
+    "OP_OR": {
+        "word": "OP_OR",
+        "word_alt": "",
+        "opcode": "0x85",
+        "input": "x1 x2",
+        "output": "out",
+        "short": "Boolean or between each bit in the inputs. disabled."
+    },
+    "OP_OVER": {
+        "word": "OP_OVER",
+        "word_alt": "",
+        "opcode": "0x78",
+        "input": "x1 x2",
+        "output": "x1 x2 x1",
+        "short": "Copies the second-to-top stack item to the top."
+    },
+    "OP_PICK": {
+        "word": "OP_PICK",
+        "word_alt": "",
+        "opcode": "0x79",
+        "input": "xn ... x2 x1 x0 \u003cn\u003e",
+        "output": "xn ... x2 x1 x0 xn",
+        "short": "The item n back in the stack is copied to the top."
+    },
+    "OP_PUBKEY": {
+        "word": "OP_PUBKEY",
+        "word_alt": "",
+        "opcode": "0xfe",
+        "input": "",
+        "output": "",
+        "short": "Represents a public key compatible with OP_CHECKSIG."
+    },
+    "OP_PUBKEYHASH": {
+        "word": "OP_PUBKEYHASH",
+        "word_alt": "",
+        "opcode": "0xfd",
+        "input": "",
+        "output": "",
+        "short": "Represents a public key hashed with OP_HASH160."
+    },
+    "OP_PUSHDATA1": {
+        "word": "OP_PUSHDATA1",
+        "word_alt": "",
+        "opcode": "0x4c",
+        "input": "(special)",
+        "output": "data",
+        "short": "The next byte contains the number of bytes to be pushed onto the stack."
+    },
+    "OP_PUSHDATA2": {
+        "word": "OP_PUSHDATA2",
+        "word_alt": "",
+        "opcode": "0x4d",
+        "input": "(special)",
+        "output": "data",
+        "short": "The next two bytes contain the number of bytes to be pushed onto the stack in little endian order."
+    },
+    "OP_PUSHDATA4": {
+        "word": "OP_PUSHDATA4",
+        "word_alt": "",
+        "opcode": "0x4e",
+        "input": "(special)",
+        "output": "data",
+        "short": "The next four bytes contain the number of bytes to be pushed onto the stack in little endian order."
+    },
+    "OP_RESERVED": {
+        "word": "OP_RESERVED",
+        "word_alt": "",
+        "opcode": "0x50",
+        "input": "",
+        "output": "",
+        "short": "Transaction is invalid unless occuring in an unexecuted OP_IF branch"
+    },
+    "OP_RESERVED1": {
+        "word": "OP_RESERVED1",
+        "word_alt": "",
+        "opcode": "0x89",
+        "input": "",
+        "output": "",
+        "short": "Transaction is invalid unless occuring in an unexecuted OP_IF branch"
+    },
+    "OP_RESERVED2": {
+        "word": "OP_RESERVED2",
+        "word_alt": "",
+        "opcode": "0x8a",
+        "input": "",
+        "output": "",
+        "short": "Transaction is invalid unless occuring in an unexecuted OP_IF branch"
+    },
+    "OP_RETURN": {
+        "word": "OP_RETURN",
+        "word_alt": "",
+        "opcode": "0x6a",
+        "input": "Nothing",
+        "output": "fail",
+        "short": "Marks transaction as invalid. Since bitcoin 0.9, a standard way of attaching extra data to transactions is to add a zero-value output with a scriptPubKey consisting of OP_RETURN followed by data. Such outputs are provably unspendable and specially discarded from storage in the UTXO set, reducing their cost to the network. Since 0.12, standard relay rules allow a single output with OP_RETURN, that contains any sequence of push statements (or OP_RESERVED[1]) after the OP_RETURN provided the total scriptPubKey length is at most 83 bytes."
+    },
+    "OP_RIGHT": {
+        "word": "OP_RIGHT",
+        "word_alt": "",
+        "opcode": "0x81",
+        "input": "in size",
+        "output": "out",
+        "short": "Keeps only characters right of the specified point in a string. disabled."
+    },
+    "OP_RIPEMD160": {
+        "word": "OP_RIPEMD160",
+        "word_alt": "",
+        "opcode": "0xa6",
+        "input": "in",
+        "output": "hash",
+        "short": "The input is hashed using RIPEMD-160."
+    },
+    "OP_ROLL": {
+        "word": "OP_ROLL",
+        "word_alt": "",
+        "opcode": "0x7a",
+        "input": "xn ... x2 x1 x0 \u003cn\u003e",
+        "output": "... x2 x1 x0 xn",
+        "short": "The item n back in the stack is moved to the top."
+    },
+    "OP_ROT": {
+        "word": "OP_ROT",
+        "word_alt": "",
+        "opcode": "0x7b",
+        "input": "x1 x2 x3",
+        "output": "x2 x3 x1",
+        "short": "The top three items on the stack are rotated to the left."
+    },
+    "OP_RSHIFT": {
+        "word": "OP_RSHIFT",
+        "word_alt": "",
+        "opcode": "0x99",
+        "input": "a b",
+        "output": "out",
+        "short": "Shifts a right b bits, preserving sign. disabled."
+    },
+    "OP_SHA1": {
+        "word": "OP_SHA1",
+        "word_alt": "",
+        "opcode": "0xa7",
+        "input": "in",
+        "output": "hash",
+        "short": "The input is hashed using SHA-1."
+    },
+    "OP_SHA256": {
+        "word": "OP_SHA256",
+        "word_alt": "",
+        "opcode": "0xa8",
+        "input": "in",
+        "output": "hash",
+        "short": "The input is hashed using SHA-256."
+    },
+    "OP_SIZE": {
+        "word": "OP_SIZE",
+        "word_alt": "",
+        "opcode": "0x82",
+        "input": "in",
+        "output": "in size",
+        "short": "Pushes the string length of the top element of the stack (without popping it)."
+    },
+    "OP_SUB": {
+        "word": "OP_SUB",
+        "word_alt": "",
+        "opcode": "0x94",
+        "input": "a b",
+        "output": "out",
+        "short": "b is subtracted from a."
+    },
+    "OP_SUBSTR": {
+        "word": "OP_SUBSTR",
+        "word_alt": "",
+        "opcode": "0x7f",
+        "input": "in begin size",
+        "output": "out",
+        "short": "Returns a section of a string. disabled."
+    },
+    "OP_SWAP": {
+        "word": "OP_SWAP",
+        "word_alt": "",
+        "opcode": "0x7c",
+        "input": "x1 x2",
+        "output": "x2 x1",
+        "short": "The top two items on the stack are swapped."
+    },
+    "OP_TOALTSTACK": {
+        "word": "OP_TOALTSTACK",
+        "word_alt": "",
+        "opcode": "0x6b",
+        "input": "x1",
+        "output": "(alt)x1",
+        "short": "Puts the input onto the top of the alt stack. Removes it from the main stack."
+    },
+    "OP_TRUE": {
+        "word": "OP_TRUE",
+        "word_alt": "OP_1",
+        "opcode": "0x51",
+        "input": "Nothing.",
+        "output": "1",
+        "short": "The number 1 is pushed onto the stack."
+    },
+    "OP_TUCK": {
+        "word": "OP_TUCK",
+        "word_alt": "",
+        "opcode": "0x7d",
+        "input": "x1 x2",
+        "output": "x2 x1 x2",
+        "short": "The item at the top of the stack is copied and inserted before the second-to-top item."
+    },
+    "OP_VER": {
+        "word": "OP_VER",
+        "word_alt": "",
+        "opcode": "0x62",
+        "input": "",
+        "output": "",
+        "short": "Transaction is invalid unless occuring in an unexecuted OP_IF branch"
+    },
+    "OP_VERIF": {
+        "word": "OP_VERIF",
+        "word_alt": "",
+        "opcode": "0x65",
+        "input": "",
+        "output": "",
+        "short": "Transaction is invalid even when occuring in an unexecuted OP_IF branch"
+    },
+    "OP_VERIFY": {
+        "word": "OP_VERIFY",
+        "word_alt": "",
+        "opcode": "0x69",
+        "input": "True / false",
+        "output": "Nothing / fail",
+        "short": "Marks transaction as invalid if top stack value is not true. The top stack value is removed."
+    },
+    "OP_VERNOTIF": {
+        "word": "OP_VERNOTIF",
+        "word_alt": "",
+        "opcode": "0x66",
+        "input": "",
+        "output": "",
+        "short": "Transaction is invalid even when occuring in an unexecuted OP_IF branch"
+    },
+    "OP_WITHIN": {
+        "word": "OP_WITHIN",
+        "word_alt": "",
+        "opcode": "0xa5",
+        "input": "x min max",
+        "output": "out",
+        "short": "Returns 1 if x is within the specified range (left-inclusive), 0 otherwise."
+    },
+    "OP_XOR": {
+        "word": "OP_XOR",
+        "word_alt": "",
+        "opcode": "0x86",
+        "input": "x1 x2",
+        "output": "out",
+        "short": "Boolean exclusive or between each bit in the inputs. disabled."
+    }
+}

@@ -5,18 +5,22 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"regexp"
+	"strconv"
 	"strings"
 
+	"github.com/PuerkitoBio/goquery"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"golang.org/x/net/html"
 )
 
 type opcodeSpec struct {
-	Word   string `json:"word"`
-	Opcode string `json:"opcode"`
-	Input  string `json:"input"`
-	Output string `json:"output"`
-	Short  string `json:"short"`
+	Word    string `json:"word"`
+	WordAlt string `json:"word_alt"`
+	Opcode  string `json:"opcode"`
+	Input   string `json:"input"`
+	Output  string `json:"output"`
+	Short   string `json:"short"`
 }
 
 func newBuildSpecCmd() *cobra.Command {
@@ -35,65 +39,46 @@ func newBuildSpecCmd() *cobra.Command {
 			}
 			defer resp.Body.Close()
 
-			z := html.NewTokenizer(resp.Body)
-
-			var insideTable bool
-			var insideRow bool
-			var scrapedTables uint8
-
-		Loop:
-			for {
-				tt := z.Next()
-
-				switch {
-				case tt == html.ErrorToken:
-					break Loop
-
-				case tt == html.StartTagToken:
-					t := z.Token()
-
-					if !insideTable {
-						if isTable(t) {
-							insideTable = true
-						}
-						continue
-					}
-
-					if !insideRow {
-						if isTableRow(t) {
-							insideRow = true
-						}
-						continue
-					}
-
-					if op := scrapeSpec(z); op != nil {
-						spec[op.Word] = *op
-					}
-
-				case tt == html.EndTagToken:
-					t := z.Token()
-
-					if insideTable {
-						scrapedTables++
-
-						if scrapedTables >= totalTables {
-							break Loop
-						}
-
-						if isTable(t) {
-							insideTable = false
-						}
-					}
-
-					if insideRow {
-						if isTableRow(t) {
-							insideRow = false
-						}
-					}
+			if resp.StatusCode != http.StatusOK {
+				b, err := ioutil.ReadAll(resp.Body)
+				if err != nil {
+					return err
 				}
+
+				return fmt.Errorf("spec page is not available: %d, %s", resp.StatusCode, b)
 			}
 
-			specJSON, err := json.Marshal(spec)
+			doc, err := goquery.NewDocumentFromReader(resp.Body)
+			if err != nil {
+				return err
+			}
+
+			var scrapedTables uint8
+			doc.Find("table.wikitable").Each(func(i int, s *goquery.Selection) {
+				if scrapedTables >= totalTables {
+					return
+				}
+
+				s.Find("tr").Each(func(j int, s *goquery.Selection) {
+					cells := s.Find("td").Map(func(k int, s *goquery.Selection) string {
+						return s.Text()
+					})
+
+					if len(cells) == 0 {
+						return
+					}
+
+					ops := cellsToOps(cells)
+
+					for _, op := range ops {
+						spec[op.Word] = op
+					}
+				})
+
+				scrapedTables++
+			})
+
+			specJSON, err := json.MarshalIndent(spec, "", "    ")
 			if err != nil {
 				return err
 			}
@@ -104,84 +89,144 @@ func newBuildSpecCmd() *cobra.Command {
 	return cmd
 }
 
-func getClass(t html.Token) string {
-	for _, a := range t.Attr {
-		if a.Key == "class" {
-			return a.Val
-		}
-	}
-
-	return ""
-}
-
-func isTable(t html.Token) bool {
-	return t.Data == "table" && getClass(t) == "wikitable"
-}
-
-func isTableRow(t html.Token) bool {
-	return t.Data == "tr"
-}
-
-func isHeaderCell(t html.Token) bool {
-	return t.Data == "th"
-}
-
-func isDataCell(t html.Token) bool {
-	return t.Data == "td"
-}
-
-func scrapeSpec(z *html.Tokenizer) *opcodeSpec {
-	var cells []string
-	var spec opcodeSpec
-	var insideDataCell bool
-
-Loop:
-	for {
-		tt := z.Next()
-		switch {
-		case tt == html.ErrorToken:
-			break Loop
-
-		case tt == html.StartTagToken:
-			t := z.Token()
-
-			if !insideDataCell {
-				if isDataCell(t) {
-					insideDataCell = true
-				}
-			}
-
-		case tt == html.TextToken:
-			if !insideDataCell {
-				continue
-			}
-
-			t := z.Token()
-
-			cells = append(cells, t.Data)
-
-		case tt == html.EndTagToken:
-			t := z.Token()
-
-			if isTableRow(t) {
-				break Loop
-			}
-		}
-	}
-
+func cellsToOps(cells []string) []opcodeSpec {
 	if len(cells) == 0 {
 		return nil
 	}
 
-	spec.Word = strings.TrimSpace(cells[0])
-	spec.Opcode = strings.TrimSpace(cells[1])
-	if len(cells) == 6 {
-		spec.Input = strings.TrimSpace(cells[3])
-		spec.Output = strings.TrimSpace(cells[4])
+	for i := range cells {
+		cells[i] = strings.TrimSpace(cells[i])
 	}
-	spec.Short = strings.TrimSpace(cells[len(cells)-1])
 
-	fmt.Printf("%s ", spec.Word)
+	var input, output string
+	word := cells[0]
+	opcodeDec := cells[1]
+	opcode := cells[2]
+	if len(cells) == 6 {
+		input = cells[3]
+		output = cells[4]
+	}
+	short := cells[len(cells)-1]
 
-	return &spec
+	if !strings.HasPrefix(word, "OP_") {
+		logrus.Infof("skipping %s\n", word)
+		return nil
+	}
+
+	var ops []opcodeSpec
+	alts := strings.Split(word, ", ")
+	rnge := strings.Split(word, "-")
+
+	if len(alts) == 2 && len(rnge) == 2 {
+		rnge = strings.Split(alts[1], "-")
+		alts = []string{alts[0]}
+		opcodeDec = strings.Split(opcodeDec, ", ")[1]
+	}
+
+	cleanWord := regexp.MustCompile(`OP_[\w_-]+`)
+
+	if len(alts) == 1 {
+
+		ops = append(ops, opcodeSpec{
+			Word:   cleanWord.FindString(alts[0]),
+			Opcode: opcode,
+			Input:  input,
+			Output: output,
+			Short:  short,
+		})
+	}
+
+	if len(alts) == 2 {
+		ops = append(ops, []opcodeSpec{
+			{
+				Word:    cleanWord.FindString(alts[0]),
+				WordAlt: cleanWord.FindString(alts[1]),
+				Opcode:  opcode,
+				Input:   input,
+				Output:  output,
+				Short:   short,
+			},
+			{
+				Word:    cleanWord.FindString(alts[1]),
+				WordAlt: cleanWord.FindString(alts[0]),
+				Opcode:  opcode,
+				Input:   input,
+				Output:  output,
+				Short:   short,
+			},
+		}...)
+	}
+
+	if len(rnge) == 2 {
+		leftOp := rnge[0]
+		rightOp := rnge[1]
+
+		opNumber := regexp.MustCompile(`(OP_[A-Z]*)(\d+)`)
+
+		leftMatches := opNumber.FindStringSubmatch(leftOp)
+		rightMatches := opNumber.FindStringSubmatch(rightOp)
+		if len(leftMatches) != 3 || len(rightMatches) != 3 {
+			logrus.Errorf("skipping %s: invalid opcodes range %q, %q\n", word, leftMatches, rightMatches)
+			return ops
+		}
+
+		leftN, err := strconv.Atoi(leftMatches[2])
+		if err != nil {
+			logrus.Errorf("skipping %s: %+v\n", word, err)
+			return ops
+		}
+
+		rightN, err := strconv.Atoi(rightMatches[2])
+		if err != nil {
+			logrus.Errorf("skipping %s: %+v\n", word, err)
+			return ops
+		}
+
+		opcodes := strings.Split(opcodeDec, "-")
+		if len(opcodes) != 2 {
+			logrus.Errorf("skipping %s: invalid opcode %+v\n", word, opcodeDec)
+			return ops
+		}
+
+		opcodeLeft, err := strconv.Atoi(opcodes[0])
+		if err != nil {
+			logrus.Errorf("skipping %s: %+v\n", word, err)
+			return ops
+		}
+
+		var outputLeft int
+
+		isEmptyOutput := len(output) == 0
+
+		if !isEmptyOutput {
+			outputs := strings.Split(output, "-")
+			if len(outputs) != 2 {
+				logrus.Errorf("skipping %s: invalid output %+v\n", word, output)
+				return ops
+			}
+
+			outputLeft, err = strconv.Atoi(outputs[0])
+			if err != nil {
+				logrus.Errorf("skipping %s: %+v\n", word, err)
+				return ops
+			}
+		}
+
+		for i := leftN; i <= rightN; i++ {
+			op := opcodeSpec{
+				Word:   fmt.Sprintf("%s%d", leftMatches[1], i),
+				Opcode: fmt.Sprintf("0x%x", opcodeLeft+i-leftN),
+				Input:  input,
+				Short:  short,
+			}
+
+			if !isEmptyOutput {
+				op.Output = strconv.Itoa(outputLeft + i - leftN)
+			}
+
+			ops = append(ops, op)
+		}
+	}
+
+	return ops
 }
