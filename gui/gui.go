@@ -11,7 +11,9 @@ import (
 )
 
 const (
+	keyTilde   = '~'
 	keyQ       = 'q'
+	viewDebug  = "debug"
 	viewScript = "script"
 	viewSpec   = "spec"
 	viewStack  = "stack"
@@ -106,6 +108,17 @@ func (g *GUI) layout(c *gocui.Gui) error {
 		}
 	}
 
+	if v, err := c.SetView(viewDebug, int(0.7*float64(maxX)), int(0.4*float64(maxY)), maxX-1, int(0.6*float64(maxY))); err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+
+		v.Title = "Debug"
+		if _, err := g.cui.SetViewOnBottom(viewDebug); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -174,6 +187,22 @@ func (g GUI) setKeybindings(c *gocui.Gui) error {
 		return err
 	}
 
+	if err := c.SetKeybinding("", keyTilde, gocui.ModNone, g.showDebugView); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (g GUI) updateDebug(line string) error {
+	v, err := g.cui.View(viewDebug)
+	if err != nil {
+		return err
+	}
+
+	v.Autoscroll = true
+
+	fmt.Fprintln(v, line)
 	return nil
 }
 

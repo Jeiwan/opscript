@@ -92,3 +92,11 @@ func (g *GUI) cursorUp(c *gocui.Gui, v *gocui.View) error {
 	}
 	return nil
 }
+
+func (g *GUI) showDebugView(c *gocui.Gui, v *gocui.View) error {
+	if _, err := g.cui.SetViewOnTop(viewDebug); err != nil {
+		return err
+	}
+
+	return nil
+}
