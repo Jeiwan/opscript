@@ -9,19 +9,11 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Jeiwan/opscript/spec"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
-
-type opcodeSpec struct {
-	Word    string `json:"word"`
-	WordAlt string `json:"word_alt"`
-	Opcode  string `json:"opcode"`
-	Input   string `json:"input"`
-	Output  string `json:"output"`
-	Short   string `json:"short"`
-}
 
 func newBuildSpecCmd() *cobra.Command {
 	const specURL = "https://en.bitcoin.it/wiki/Script"
@@ -31,7 +23,7 @@ func newBuildSpecCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "buildspec",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			spec := make(map[string]opcodeSpec)
+			spec := make(spec.Script)
 
 			resp, err := http.Get(specURL)
 			if err != nil {
@@ -89,7 +81,7 @@ func newBuildSpecCmd() *cobra.Command {
 	return cmd
 }
 
-func cellsToOps(cells []string) []opcodeSpec {
+func cellsToOps(cells []string) []spec.Opcode {
 	if len(cells) == 0 {
 		return nil
 	}
@@ -113,7 +105,7 @@ func cellsToOps(cells []string) []opcodeSpec {
 		return nil
 	}
 
-	var ops []opcodeSpec
+	var ops []spec.Opcode
 	alts := strings.Split(word, ", ")
 	rnge := strings.Split(word, "-")
 
@@ -127,7 +119,7 @@ func cellsToOps(cells []string) []opcodeSpec {
 
 	if len(alts) == 1 {
 
-		ops = append(ops, opcodeSpec{
+		ops = append(ops, spec.Opcode{
 			Word:   cleanWord.FindString(alts[0]),
 			Opcode: opcode,
 			Input:  input,
@@ -137,7 +129,7 @@ func cellsToOps(cells []string) []opcodeSpec {
 	}
 
 	if len(alts) == 2 {
-		ops = append(ops, []opcodeSpec{
+		ops = append(ops, []spec.Opcode{
 			{
 				Word:    cleanWord.FindString(alts[0]),
 				WordAlt: cleanWord.FindString(alts[1]),
@@ -213,7 +205,7 @@ func cellsToOps(cells []string) []opcodeSpec {
 		}
 
 		for i := leftN; i <= rightN; i++ {
-			op := opcodeSpec{
+			op := spec.Opcode{
 				Word:   fmt.Sprintf("%s%d", leftMatches[1], i),
 				Opcode: fmt.Sprintf("0x%x", opcodeLeft+i-leftN),
 				Input:  input,
