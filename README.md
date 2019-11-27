@@ -10,6 +10,7 @@ A viewer and debugger of Bitcoin scripts. **Early development.**
 1. Automatically finds related output.
 1. Allows to navigate forward and backward.
 1. Shows stack per line of code.
+1. Shows opcodes information (hex code, input, output, and description).
 1. Supports witness data (SegWit).
 1. Uses [`btcd/txscript`](https://github.com/btcsuite/btcd/tree/master/txscript) under the hood.
 
