@@ -10,16 +10,26 @@ func (g *GUI) cursorDown(c *gocui.Gui, v *gocui.View) error {
 			return nil
 		}
 
+		ox, oy := v.Origin()
+		_, maxY := v.Size()
 		cx, cy := v.Cursor()
-		nextLine := g.codeLines.next(cy)
+		nextLine := g.codeLines.next(cy + oy)
 		lastLine := g.codeLines.last()
+
+		maxY-- // one-line padding at the bottom
 
 		if nextLine.lineIdx > lastLine.lineIdx {
 			return nil
 		}
 
+		if nextLine.lineIdx > maxY {
+			if err := v.SetOrigin(cx, oy+1); err != nil {
+				return err
+			}
+			nextLine.lineIdx = maxY
+		}
+
 		if err := v.SetCursor(cx, nextLine.lineIdx); err != nil {
-			ox, _ := v.Origin()
 			if err := v.SetOrigin(ox, g.codeLines.first().lineIdx); err != nil {
 				return err
 			}
@@ -45,13 +55,23 @@ func (g *GUI) cursorUp(c *gocui.Gui, v *gocui.View) error {
 		}
 
 		ox, oy := v.Origin()
+		_, maxY := v.Size()
 		cx, cy := v.Cursor()
 
-		prevLine := g.codeLines.previous(cy)
+		prevLine := g.codeLines.previous(oy + cy)
 		firstLine := g.codeLines.first()
+
+		maxY-- // one-line padding at the bottom
 
 		if prevLine.lineIdx < firstLine.lineIdx {
 			return nil
+		}
+
+		if prevLine.lineIdx >= maxY {
+			if err := v.SetOrigin(cx, oy-1); err != nil {
+				return err
+			}
+			prevLine.lineIdx = maxY
 		}
 
 		if err := v.SetCursor(cx, prevLine.lineIdx); err != nil && oy > 0 {
