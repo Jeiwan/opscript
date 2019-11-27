@@ -68,6 +68,7 @@ func (g *GUI) layout(c *gocui.Gui) error {
 			return fmt.Errorf("setView 'script': %+v", err)
 		}
 
+		v.Title = "Script"
 		v.Highlight = true
 		v.SelBgColor = gocui.ColorGreen
 		v.SelFgColor = gocui.ColorBlack
@@ -80,10 +81,13 @@ func (g *GUI) layout(c *gocui.Gui) error {
 
 	}
 
-	if _, err := c.SetView(viewStack, int(0.5*float64(maxX)), 0, maxX-1, int(0.7*float64(maxY))-1); err != nil {
+	if v, err := c.SetView(viewStack, int(0.5*float64(maxX)), 0, maxX-1, int(0.7*float64(maxY))-1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
+
+		v.Title = "Stack"
+
 		if err := g.updateStack(); err != nil {
 			return err
 		}
@@ -94,6 +98,7 @@ func (g *GUI) layout(c *gocui.Gui) error {
 			return err
 		}
 
+		v.Title = "Spec"
 		v.Wrap = true
 
 		if err := g.updateSpec(); err != nil {
