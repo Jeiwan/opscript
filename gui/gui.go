@@ -2,14 +2,18 @@ package gui
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/Jeiwan/opscript/debugger"
+	"github.com/Jeiwan/opscript/spec"
 	"github.com/jroimartin/gocui"
 )
 
 const (
 	keyQ       = 'q'
 	viewScript = "script"
+	viewSpec   = "spec"
 	viewStack  = "stack"
 )
 
@@ -18,10 +22,11 @@ type GUI struct {
 	codeLines codeLines
 	cui       *gocui.Gui
 	debugger  *debugger.Debugger
+	spec      spec.Script
 }
 
 // New returns a new GUI.
-func New(debugger *debugger.Debugger) (*GUI, error) {
+func New(debugger *debugger.Debugger, spec spec.Script) (*GUI, error) {
 	c, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		return nil, err
@@ -31,6 +36,7 @@ func New(debugger *debugger.Debugger) (*GUI, error) {
 		codeLines: []codeLine{},
 		cui:       c,
 		debugger:  debugger,
+		spec:      spec,
 	}
 
 	g.populateCodeLines()
@@ -74,11 +80,23 @@ func (g *GUI) layout(c *gocui.Gui) error {
 
 	}
 
-	if _, err := c.SetView(viewStack, int(0.5*float64(maxX)), 0, maxX-1, maxY-1); err != nil {
+	if _, err := c.SetView(viewStack, int(0.5*float64(maxX)), 0, maxX-1, int(0.7*float64(maxY))-1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
 		if err := g.updateStack(); err != nil {
+			return err
+		}
+	}
+
+	if v, err := c.SetView(viewSpec, int(0.5*float64(maxX)), int(0.7*float64(maxY)), maxX-1, maxY-1); err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+
+		v.Wrap = true
+
+		if err := g.updateSpec(); err != nil {
 			return err
 		}
 	}
@@ -139,6 +157,35 @@ func (g GUI) setKeybindings(c *gocui.Gui) error {
 	if err := c.SetKeybinding("", 'q', gocui.ModNone, quit); err != nil {
 		return err
 	}
+
+	return nil
+}
+
+func (g GUI) updateSpec() error {
+	v, err := g.cui.View(viewSpec)
+	if err != nil {
+		return err
+	}
+
+	v.Clear()
+
+	step := g.debugger.CurrentStep()
+	opcodeRegex := regexp.MustCompile(`OP_[\w_]+`)
+	opcode := opcodeRegex.FindString(step.Disasm)
+	if opcode == "" || strings.HasPrefix(opcode, "OP_DATA") {
+		return nil
+	}
+
+	spec := g.spec[opcode]
+	if spec.Word == "" {
+		fmt.Fprintf(v, " Missing spec for %s.", opcode)
+		return nil
+	}
+
+	fmt.Fprintf(v, " %s (%s)\n\n", spec.Word, spec.Opcode)
+	fmt.Fprintf(v, " Input:  %s\n", spec.Input)
+	fmt.Fprintf(v, " Output: %s\n", spec.Output)
+	fmt.Fprintf(v, " \n %s", spec.Short)
 
 	return nil
 }

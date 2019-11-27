@@ -30,6 +30,10 @@ func (g *GUI) cursorDown(c *gocui.Gui, v *gocui.View) error {
 		if err := g.updateStack(); err != nil {
 			return err
 		}
+
+		if err := g.updateSpec(); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -59,6 +63,10 @@ func (g *GUI) cursorUp(c *gocui.Gui, v *gocui.View) error {
 		g.debugger.Previous()
 
 		if err := g.updateStack(); err != nil {
+			return err
+		}
+
+		if err := g.updateSpec(); err != nil {
 			return err
 		}
 	}

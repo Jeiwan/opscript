@@ -5,6 +5,7 @@ import (
 
 	"github.com/Jeiwan/opscript/debugger"
 	"github.com/Jeiwan/opscript/gui"
+	"github.com/Jeiwan/opscript/spec"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/rpcclient"
 	"github.com/btcsuite/btcd/txscript"
@@ -14,8 +15,8 @@ import (
 )
 
 // New ...
-func New() *cobra.Command {
-	rootCmd := newRootCmd()
+func New(spec spec.Script) *cobra.Command {
+	rootCmd := newRootCmd(spec)
 	buildSpecCmd := newBuildSpecCmd()
 
 	rootCmd.AddCommand(buildSpecCmd)
@@ -23,7 +24,7 @@ func New() *cobra.Command {
 	return rootCmd
 }
 
-func newRootCmd() *cobra.Command {
+func newRootCmd(spec spec.Script) *cobra.Command {
 	var nodeAddr, rpcUser, rpcPass, txHash string
 	var txInput int
 
@@ -69,7 +70,7 @@ func newRootCmd() *cobra.Command {
 				logrus.Fatalln(err)
 			}
 
-			gui, err := gui.New(d)
+			gui, err := gui.New(d, spec)
 			if err != nil {
 				logrus.Fatalln(err)
 			}
