@@ -113,6 +113,9 @@ func (g *GUI) populateCodeLines() {
 	g.codeLines = nil
 	curLine := 0
 
+	var hasSigScript bool
+	var hasPkScript bool
+
 	for _, s := range g.debugger.Steps {
 		if isFirstScriptLine(s.Disasm) {
 			var line codeLine
@@ -120,16 +123,24 @@ func (g *GUI) populateCodeLines() {
 			line.lineIdx = curLine
 
 			if isSignatureScript(s.Disasm) {
+				hasSigScript = true
 				line.text = "        Signature Script\n"
 				curLine++
 
 			} else if isPubkeyScript(s.Disasm) {
+				hasPkScript = true
 				line.text = "\n        Pubkey Script\n"
-				curLine += 2
+				curLine++
+				if hasSigScript {
+					curLine++
+				}
 
 			} else if isWitnessScript(s.Disasm) {
 				line.text = "\n        Witness Script\n"
-				curLine += 2
+				curLine++
+				if hasPkScript || hasSigScript {
+					curLine++
+				}
 			}
 
 			g.codeLines = append(g.codeLines, line)
