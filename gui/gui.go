@@ -170,7 +170,7 @@ func (g GUI) setKeybindings(c *gocui.Gui) error {
 		return err
 	}
 
-	if err := c.SetKeybinding("", 'q', gocui.ModNone, quit); err != nil {
+	if err := c.SetKeybinding("", keyQ, gocui.ModNone, quit); err != nil {
 		return err
 	}
 
