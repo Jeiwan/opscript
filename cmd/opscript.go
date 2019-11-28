@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/Jeiwan/opscript/blockchain/blockstream"
 	"github.com/Jeiwan/opscript/blockchain/node"
 	"github.com/Jeiwan/opscript/debugger"
 	"github.com/Jeiwan/opscript/gui"
@@ -12,6 +13,11 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
+
+// Blockchain ...
+type Blockchain interface {
+	GetTransaction(txHash string) (*wire.MsgTx, error)
+}
 
 // New ...
 func New(spec spec.Script) *cobra.Command {
@@ -24,22 +30,30 @@ func New(spec spec.Script) *cobra.Command {
 }
 
 func newRootCmd(spec spec.Script) *cobra.Command {
+	var useNode, useBlockstream bool
 	var nodeAddr, rpcUser, rpcPass, txHash string
 	var txInput int
 
 	cmd := &cobra.Command{
 		Use: "opscript",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			node := node.New(nodeAddr, rpcUser, rpcPass)
+			var bchain Blockchain
 
-			tx, err := node.GetTransaction(txHash)
+			switch {
+			case useBlockstream:
+				bchain = blockstream.New()
+			case useNode:
+				bchain = node.New(nodeAddr, rpcUser, rpcPass)
+			}
+
+			tx, err := bchain.GetTransaction(txHash)
 			if err != nil {
 				return err
 			}
 
 			prevOut := tx.TxIn[txInput].PreviousOutPoint
 
-			prevTx, err := node.GetTransaction(prevOut.Hash.String())
+			prevTx, err := bchain.GetTransaction(prevOut.Hash.String())
 			if err != nil {
 				logrus.Fatal(fmt.Errorf("get prev transaction: %+v", err))
 			}
@@ -67,6 +81,8 @@ func newRootCmd(spec spec.Script) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().BoolVar(&useNode, "node", true, "Use Bitcoin node to get transactions (requires 'txindex=1').")
+	cmd.Flags().BoolVar(&useBlockstream, "blockstream", false, "Use blockstream.info API to get transactions.")
 	cmd.Flags().StringVar(&nodeAddr, "node-addr", "127.0.0.1:8332", "Bitcoin node address.")
 	cmd.Flags().StringVar(&rpcUser, "rpc-user", "", "Bitcoin JSON-RPC username.")
 	cmd.Flags().StringVar(&rpcPass, "rpc-pass", "", "Bitcoin JSON-RPC password.")
