@@ -6,7 +6,9 @@ A viewer and debugger of Bitcoin scripts. **Early development.**
 
 
 ## Features
-1. Reads transactions from a Bitcoin node (requires a full node with `txindex=1`).
+1. Can fetch transactions from:
+    1. A Bitcoin node (requires a full node with `txindex=1`). Default.
+    1. [Blockstream.info](https://blockstream.info) JSON API. Use `--blockstream` flag.
 1. Automatically finds related output.
 1. Allows to navigate forward and backward.
 1. Shows stack per line of code.
