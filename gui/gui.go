@@ -202,7 +202,7 @@ func (g GUI) updateDebug(line string) error {
 
 	v.Autoscroll = true
 
-	fmt.Fprintln(v, line)
+	fmt.Fprint(v, line)
 	return nil
 }
 

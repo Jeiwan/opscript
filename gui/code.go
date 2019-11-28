@@ -25,7 +25,7 @@ func (cls codeLines) first() codeLine {
 		}
 	}
 
-	return codeLine{lineIdx: -1}
+	return cls[0]
 }
 
 func (cls codeLines) last() codeLine {
@@ -56,7 +56,7 @@ func (cls codeLines) next(curLine int) codeLine {
 		}
 	}
 
-	return codeLine{lineIdx: cls.last().lineIdx + 1}
+	return cls[len(cls)-1]
 }
 
 func (cls codeLines) previous(curLine int) codeLine {
