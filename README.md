@@ -42,6 +42,12 @@ A viewer and debugger of Bitcoin scripts. **Early development.**
 
 
 ## Example
+Using a Bitcoin node:
 ```shell
 opscript --rpc-user=woot --rpc-pass=woot --tx=70fde4687efab8dae09737f87e30042030288fec42fd9e12f34c435cdeb7812c
+```
+
+Using Blockstream.info API:
+```shell
+opscript --blockstream --tx=70fde4687efab8dae09737f87e30042030288fec42fd9e12f34c435cdeb7812c
 ```
