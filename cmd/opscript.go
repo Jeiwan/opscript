@@ -3,11 +3,10 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/Jeiwan/opscript/blockchain/node"
 	"github.com/Jeiwan/opscript/debugger"
 	"github.com/Jeiwan/opscript/gui"
 	"github.com/Jeiwan/opscript/spec"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/rpcclient"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/sirupsen/logrus"
@@ -31,36 +30,21 @@ func newRootCmd(spec spec.Script) *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "opscript",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			btcclient, err := rpcclient.New(&rpcclient.ConnConfig{
-				HTTPPostMode: true,
-				DisableTLS:   true,
-				Host:         nodeAddr,
-				User:         rpcUser,
-				Pass:         rpcPass,
-			}, nil)
-			if err != nil {
-				logrus.Fatal(fmt.Errorf("new Bitcoin client: %+v", err))
-			}
-			defer btcclient.Shutdown()
+			node := node.New(nodeAddr, rpcUser, rpcPass)
 
-			txHash, err := chainhash.NewHashFromStr(txHash)
+			tx, err := node.GetTransaction(txHash)
 			if err != nil {
-				logrus.Fatal(fmt.Errorf("parse txid: %+v", err))
+				return err
 			}
 
-			txResp, err := btcclient.GetRawTransaction(txHash)
-			if err != nil {
-				logrus.Fatal(fmt.Errorf("get raw transaction: %+v", err))
-			}
+			prevOut := tx.TxIn[txInput].PreviousOutPoint
 
-			prevOut := &txResp.MsgTx().TxIn[txInput].PreviousOutPoint
-			prevTxHash := prevOut.Hash
-			prevTxResp, err := btcclient.GetRawTransaction(&prevTxHash)
+			prevTx, err := node.GetTransaction(prevOut.Hash.String())
 			if err != nil {
 				logrus.Fatal(fmt.Errorf("get prev transaction: %+v", err))
 			}
 
-			en, err := newEngine(txResp.MsgTx(), prevTxResp.MsgTx().TxOut[prevOut.Index].PkScript, txInput)
+			en, err := newEngine(tx, prevTx.TxOut[prevOut.Index].PkScript, txInput)
 			if err != nil {
 				logrus.Fatal(fmt.Errorf("new engine: %+v", err))
 			}
