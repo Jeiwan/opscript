@@ -20,18 +20,27 @@ A viewer and debugger of Bitcoin scripts. **Early development.**
 ## Usage
 
 1. `go get github.com/Jeiwan/opscript`
-1. `opscript --help`
+1. `opscript help`
     ```shell
     Usage:
     opscript [flags]
+    opscript [command]
+
+    Available Commands:
+    buildspec
+    help        Help about any command
 
     Flags:
+        --blockstream        Use blockstream.info API to get transactions.
     -h, --help               help for opscript
         --input int          Index of the input to debug a script from.
+        --node               Use Bitcoin node to get transactions (requires 'txindex=1'). (default true)
         --node-addr string   Bitcoin node address. (default "127.0.0.1:8332")
         --rpc-pass string    Bitcoin JSON-RPC password.
         --rpc-user string    Bitcoin JSON-RPC username.
         --tx string          Hash of the transaction to debug a script from.
+
+    Use "opscript [command] --help" for more information about a command.
     ```
 
 
