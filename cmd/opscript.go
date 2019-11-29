@@ -1,7 +1,11 @@
 package cmd
 
 import (
+	"encoding/hex"
+	"errors"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/Jeiwan/opscript/blockchain/blockstream"
 	"github.com/Jeiwan/opscript/blockchain/node"
@@ -31,11 +35,11 @@ func New(spec spec.Script) *cobra.Command {
 
 func newRootCmd(spec spec.Script) *cobra.Command {
 	var useNode, useBlockstream bool
-	var nodeAddr, rpcUser, rpcPass, txHash string
-	var txInput int
+	var nodeAddr, rpcUser, rpcPass string
 
 	cmd := &cobra.Command{
-		Use: "opscript",
+		Use:  "opscript [flags] transactionHash:inputIndex",
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var bchain Blockchain
 
@@ -44,6 +48,11 @@ func newRootCmd(spec spec.Script) *cobra.Command {
 				bchain = blockstream.New()
 			case useNode:
 				bchain = node.New(nodeAddr, rpcUser, rpcPass)
+			}
+
+			txHash, txInput, err := parseArgs(args)
+			if err != nil {
+				return err
 			}
 
 			tx, err := bchain.GetTransaction(txHash)
@@ -86,8 +95,6 @@ func newRootCmd(spec spec.Script) *cobra.Command {
 	cmd.Flags().StringVar(&nodeAddr, "node-addr", "127.0.0.1:8332", "Bitcoin node address.")
 	cmd.Flags().StringVar(&rpcUser, "rpc-user", "", "Bitcoin JSON-RPC username.")
 	cmd.Flags().StringVar(&rpcPass, "rpc-pass", "", "Bitcoin JSON-RPC password.")
-	cmd.Flags().StringVar(&txHash, "tx", "", "Hash of the transaction to debug a script from.")
-	cmd.Flags().IntVar(&txInput, "input", 0, "Index of the input to debug a script from.")
 
 	return cmd
 }
@@ -107,4 +114,26 @@ func newEngine(tx *wire.MsgTx, output []byte, inputIdx int) (*txscript.Engine, e
 	}
 
 	return e, nil
+}
+
+func parseArgs(args []string) (txHash string, input int, err error) {
+	if len(args) != 1 {
+		return "", -1, errors.New("wrong number of arguments")
+	}
+
+	parts := strings.Split(args[0], ":")
+	if len(parts) == 2 {
+		input, err = strconv.Atoi(parts[1])
+		if err != nil {
+			return "", -1, err
+		}
+	}
+
+	if hashBytes, err := hex.DecodeString(parts[0]); err != nil || len(hashBytes) != 32 {
+		return "", -1, errors.New("wrong transaction hash")
+	}
+
+	txHash = parts[0]
+
+	return
 }
