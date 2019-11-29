@@ -23,7 +23,7 @@ A viewer and debugger of Bitcoin scripts. **Early development.**
 1. `opscript help`
     ```shell
     Usage:
-    opscript [flags]
+    opscript [flags] transactionHash:inputIndex
     opscript [command]
 
     Available Commands:
@@ -33,16 +33,13 @@ A viewer and debugger of Bitcoin scripts. **Early development.**
     Flags:
         --blockstream        Use blockstream.info API to get transactions.
     -h, --help               help for opscript
-        --input int          Index of the input to debug a script from.
         --node               Use Bitcoin node to get transactions (requires 'txindex=1'). (default true)
         --node-addr string   Bitcoin node address. (default "127.0.0.1:8332")
         --rpc-pass string    Bitcoin JSON-RPC password.
         --rpc-user string    Bitcoin JSON-RPC username.
-        --tx string          Hash of the transaction to debug a script from.
 
     Use "opscript [command] --help" for more information about a command.
     ```
-
 
 ## Key bindings
 
@@ -50,13 +47,16 @@ A viewer and debugger of Bitcoin scripts. **Early development.**
 * `↑`/`↓` – navigate between lines of code
 
 
-## Example
-Using a Bitcoin node:
-```shell
-opscript --rpc-user=woot --rpc-pass=woot --tx=70fde4687efab8dae09737f87e30042030288fec42fd9e12f34c435cdeb7812c
-```
-
-Using Blockstream.info API:
-```shell
-opscript --blockstream --tx=70fde4687efab8dae09737f87e30042030288fec42fd9e12f34c435cdeb7812c
-```
+## Examples
+* Using Blockstream.info API:
+    ```shell
+    opscript --blockstream 70fde4687efab8dae09737f87e30042030288fec42fd9e12f34c435cdeb7812c
+    ```
+* Specifying input index:
+    ```shell
+    opscript --blockstream 70fde4687efab8dae09737f87e30042030288fec42fd9e12f34c435cdeb7812c:0
+    ```
+* Using a Bitcoin node:
+    ```shell
+    opscript --rpc-user=woot --rpc-pass=woot 70fde4687efab8dae09737f87e30042030288fec42fd9e12f34c435cdeb7812c
+    ```
