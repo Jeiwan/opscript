@@ -140,19 +140,19 @@ func (g *GUI) populateCodeLines() {
 
 			if isSignatureScript(s.Disasm) {
 				hasSigScript = true
-				line.text = "        Signature Script\n"
+				line.text = "  Signature Script\n"
 				curLine++
 
 			} else if isPubkeyScript(s.Disasm) {
 				hasPkScript = true
-				line.text = "\n        Pubkey Script\n"
+				line.text = "\n  Pubkey Script\n"
 				curLine++
 				if hasSigScript {
 					curLine++
 				}
 
 			} else if isWitnessScript(s.Disasm) {
-				line.text = "\n        Witness Script\n"
+				line.text = "\n  Witness Script\n"
 				curLine++
 				if hasPkScript || hasSigScript {
 					curLine++

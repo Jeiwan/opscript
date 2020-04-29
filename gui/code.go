@@ -85,7 +85,6 @@ func formatDisasm(line string, indentation *int, indentationStep int) string {
 		return line
 	}
 
-	lineNumber := strings.TrimSpace(parts[1])
 	code := strings.TrimSpace(parts[2])
 
 	// Decrease indentation for OP_ELSE and OP_ENDIF statements
@@ -94,7 +93,7 @@ func formatDisasm(line string, indentation *int, indentationStep int) string {
 		*indentation -= indentationStep
 	}
 
-	line = fmt.Sprintf(" %s   %s%s", lineNumber, strings.Repeat(" ", *indentation), code)
+	line = fmt.Sprintf("  %s%s", strings.Repeat(" ", *indentation), code)
 
 	// Increase indentation for all line inside OP_IF and OP_ELSE
 	if strings.HasPrefix(code, "OP_IF") ||

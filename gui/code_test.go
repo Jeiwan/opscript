@@ -12,17 +12,17 @@ func TestFormatDisasm(t *testing.T) {
 		{name: "data",
 			input:       "00:0000: OP_DATA_3 deadbeef",
 			indentation: 0,
-			expected:    " 0000   deadbeef"},
+			expected:    "  deadbeef"},
 
 		{name: "op",
 			input:       "00:0000: OP_1",
 			indentation: 0,
-			expected:    " 0000   OP_1"},
+			expected:    "  OP_1"},
 
 		{name: "with indentation",
 			input:       "00:0000: OP_1",
 			indentation: 4,
-			expected:    " 0000       OP_1"},
+			expected:    "      OP_1"},
 	}
 
 	for _, test := range tests {
