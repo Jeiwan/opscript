@@ -98,6 +98,7 @@ func formatDisasm(line string, indentation *int, indentationStep int) string {
 
 	// Increase indentation for all line inside OP_IF and OP_ELSE
 	if strings.HasPrefix(code, "OP_IF") ||
+		strings.HasPrefix(code, "OP_NOTIF") ||
 		strings.HasPrefix(code, "OP_ELSE") {
 		*indentation += indentationStep
 	}
