@@ -44,6 +44,7 @@ func (b Blockstream) GetTransaction(txHash string) (*wire.MsgTx, error) {
 	}
 
 	msgTx := wire.NewMsgTx(tx.Version)
+	msgTx.LockTime = uint32(tx.Locktime)
 
 	for _, vin := range tx.Vin {
 		voutHash, err := chainhash.NewHashFromStr(vin.Txid)
@@ -66,13 +67,14 @@ func (b Blockstream) GetTransaction(txHash string) (*wire.MsgTx, error) {
 			witness = append(witness, ws)
 		}
 
-		msgTx.AddTxIn(
-			wire.NewTxIn(
-				wire.NewOutPoint(voutHash, vin.Vout),
-				sigScript,
-				witness,
-			),
+		newInput := wire.NewTxIn(
+			wire.NewOutPoint(voutHash, vin.Vout),
+			sigScript,
+			witness,
 		)
+		newInput.Sequence = uint32(vin.Sequence)
+
+		msgTx.AddTxIn(newInput)
 	}
 
 	for _, vout := range tx.Vout {
