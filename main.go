@@ -26,6 +26,6 @@ func main() {
 	}
 
 	if err := cmd.New(scriptSpec).Execute(); err != nil {
-		logrus.Fatalln(err)
+		os.Exit(1)
 	}
 }
