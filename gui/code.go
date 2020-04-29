@@ -76,7 +76,7 @@ func (cls codeLines) previous(curLine int) codeLine {
 	return cls[0]
 }
 
-func formatDisasm(line string) string {
+func formatDisasm(line string, indentation *int, indentationStep int) string {
 	opData := regexp.MustCompile(`OP_DATA_\d+ `)
 	line = opData.ReplaceAllString(line, "")
 
@@ -85,7 +85,22 @@ func formatDisasm(line string) string {
 		return line
 	}
 
-	line = fmt.Sprintf(" %s  %s", parts[1], parts[2])
+	lineNumber := strings.TrimSpace(parts[1])
+	code := strings.TrimSpace(parts[2])
+
+	// Decrease indentation for OP_ELSE and OP_ENDIF statements
+	if strings.HasPrefix(code, "OP_ELSE") ||
+		strings.HasPrefix(code, "OP_ENDIF") {
+		*indentation -= indentationStep
+	}
+
+	line = fmt.Sprintf(" %s   %s%s", lineNumber, strings.Repeat(" ", *indentation), code)
+
+	// Increase indentation for all line inside OP_IF and OP_ELSE
+	if strings.HasPrefix(code, "OP_IF") ||
+		strings.HasPrefix(code, "OP_ELSE") {
+		*indentation += indentationStep
+	}
 
 	return line
 }

@@ -129,6 +129,9 @@ func (g *GUI) populateCodeLines() {
 	var hasSigScript bool
 	var hasPkScript bool
 
+	indentation := 0
+	indentationStep := 4
+
 	for _, s := range g.debugger.Steps {
 		if isFirstScriptLine(s.Disasm) {
 			var line codeLine
@@ -161,7 +164,7 @@ func (g *GUI) populateCodeLines() {
 
 		var line codeLine
 		line.lineIdx = curLine
-		line.text = fmt.Sprintln(formatDisasm(s.Disasm))
+		line.text = fmt.Sprintln(formatDisasm(s.Disasm, &indentation, indentationStep))
 
 		g.codeLines = append(g.codeLines, line)
 		curLine++

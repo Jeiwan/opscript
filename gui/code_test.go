@@ -4,20 +4,29 @@ import "testing"
 
 func TestFormatDisasm(t *testing.T) {
 	tests := []struct {
-		name     string
-		input    string
-		expected string
+		name        string
+		input       string
+		indentation int
+		expected    string
 	}{
-		{"data",
-			"00:0000: OP_DATA_3 deadbeef",
-			" 0000   deadbeef"},
-		{"op",
-			"00:0000: OP_1",
-			" 0000   OP_1"},
+		{name: "data",
+			input:       "00:0000: OP_DATA_3 deadbeef",
+			indentation: 0,
+			expected:    " 0000   deadbeef"},
+
+		{name: "op",
+			input:       "00:0000: OP_1",
+			indentation: 0,
+			expected:    " 0000   OP_1"},
+
+		{name: "with indentation",
+			input:       "00:0000: OP_1",
+			indentation: 4,
+			expected:    " 0000       OP_1"},
 	}
 
 	for _, test := range tests {
-		actual := formatDisasm(test.input)
+		actual := formatDisasm(test.input, &test.indentation, 2)
 		if actual != test.expected {
 			t.Errorf("expected: %s, actual: %s", test.expected, actual)
 		}
